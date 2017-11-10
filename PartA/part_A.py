@@ -1,4 +1,4 @@
-#/usr/bin/env python2
+#!/usr/bin/env python2
 ''' Author: Weizhou Xing
     System biology module 3
     Part A
@@ -66,15 +66,37 @@ def local_alignment(s="", t=""):
 # def trace_back(A):
 #     pass
 
-
+# (a)
 str1 = "ACAAGGA"
 str2 = "ACAGG"
 print global_alignment(s=str1, t=str2)
-
+# (b)
 str3 = "AGCCATTACCAATTAAGG"
 str4 = "CCAATT"
 print semi_global_alignment(s=str3, t=str4)
-
+# (c)
 str5 = "AGCCTTCCTAGGG"
 str6 = "GCTTCGTTT"
 print local_alignment(s=str5, t=str6)
+
+# (d)
+def special_semi_global_alignment(s="", t=""):
+    pass
+
+
+def read_fasta(path="ebolasequences-1.fasta"):
+    with open(path) as f:
+        fasta = f.read()
+
+    sequence_list = fasta.split("\n>")
+    for i in range(len(sequence_list)):
+        start_index = sequence_list[i].find("\n")
+        sequence_list[i] = sequence_list[i][start_index:]
+        sequence_list[i] = sequence_list[i].replace("\n", "")
+
+    return sequence_list
+
+
+[str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
+
+print special_semi_global_alignment(s=str7, t=str8)
