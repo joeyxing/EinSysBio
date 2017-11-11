@@ -9,26 +9,33 @@ MATCH = 2
 MISMATCH = -1
 GAP = -4
 
+
+class return_object(object):
+    def __init__(self):
+        pass
+
+
 def global_alignment(s="", t=""):
     m = len(s) + 1
     n = len(t) + 1
-    A = np.zeros([m, n, 2])
+    A = np.zeros([m, n])
 
     for i in range(m):
-        A[i, 0, 0] = i*GAP
+        A[i, 0] = i*GAP
     for j in range(n):
-        A[0, j, 0] = j*GAP
+        A[0, j] = j*GAP
 
     for i in range(m-1):
         for j in range(n-1):
             if s[i] == t[j]:
-                A[i+1, j+1, 0] = np.max([A[i,j,0]+MATCH, A[i,j+1,0]+GAP, A[i+1,j,0]+GAP])
-                #A[i+1, j+1, 1] = np.argmax([A[i,j,0]+MATCH, A[i,j+1,0]+GAP, A[i+1,j,0]+GAP])
+                A[i+1, j+1] = np.max([A[i,j]+MATCH, A[i,j+1]+GAP, A[i+1,j]+GAP])
             else:
-                A[i+1, j+1, 0] = np.max([A[i,j,0]+MISMATCH, A[i,j+1,0]+GAP, A[i+1,j,0]+GAP])
-                #A[i+1, j+1, 1] = np.argmax([A[i,j,0]+MISMATCH, A[i,j+1,0]+GAP, A[i+1,j,0]+GAP])
+                A[i+1, j+1] = np.max([A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP])
 
-    return A[m-1,n-1,0]
+    r = return_object()
+    r.A = A
+    r.score = A[m-1,n-1]
+    return A[m-1,n-1]
 
 
 def semi_global_alignment(s="", t=""):
@@ -42,7 +49,10 @@ def semi_global_alignment(s="", t=""):
                 A[i+1, j+1] = max(A[i,j]+MATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
             else:
                 A[i+1, j+1] = max(A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
-
+    r = return_object()
+    r.A = A
+    r.score = max(max(A[m-1,1:]), max(A[1:,n-1]))
+    r.stop = (1,2)
     return max(max(A[m-1,1:]), max(A[1:,n-1]))
 
 
@@ -57,28 +67,50 @@ def local_alignment(s="", t=""):
                 A[i+1, j+1] = max(0, A[i,j]+MATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
             else:
                 A[i+1, j+1] = max(0, A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
-    # print A
-    # print np.argmax(A)
+    r = return_object()
+    r.A = A
+    r.score = max(max(A[m-1,1:]), max(A[1:,n-1]))
+    r.start = (1,2)
+    r.stop = (1,2)
     return np.max(A[:,:])
 
-# # Extra
-# def trace_back(A):
-#     pass
 
-# (a)
-str1 = "ACAAGGA"
-str2 = "ACAGG"
-print global_alignment(s=str1, t=str2)
-# (b)
-str3 = "AGCCATTACCAATTAAGG"
-str4 = "CCAATT"
-print semi_global_alignment(s=str3, t=str4)
-# (c)
-str5 = "AGCCTTCCTAGGG"
-str6 = "GCTTCGTTT"
-print local_alignment(s=str5, t=str6)
+def trace_back(A, i, j,id=0):
+    '''
+    A: score matrix
+    i: index of str1 (row)
+    j: index of str2 (column)
+    id: which branch we are dealing with (multi-branch trace back)
+    '''
+    if i==0 and j==0:
+        return insertion_idx
 
-# (d)
+    if str1[i] == str2[j]:
+        cost = MATCH
+    else:
+        cost = MISMATCH
+    #                      str1    str2
+    # insertion_idx[0] = [list(), list()]
+    b[0] = (A[i,j-1]+GAP == A[i,j])     # from -
+    b[1] = (A[i-1,j-1]+cost == A[i,j])  # from \
+    b[2] = (A[i-1,j]+GAP == A[i,j])     # from |
+
+    if b[0] and not b[1] and not b[2]:
+        insertion_idx = trace_back(A,i,j-1,id=id)
+        insertion_idx[0] = insertion_idx[0]+[i]
+    elif not b[0] and b[1] and not b[2]:
+        insertion_idx = trace_back(A,i-1,j-1,id=id)
+    elif not b[0] and not b[1] and b[2]:
+        insertion_idx = trace_back(A,i-1,j,id=id)
+        insertion_idx[1] = insertion_idx[1]+[j]
+    elif not b[0] and b[1] and b[2]:
+        pass
+    elif b[0] and b[1] and not b[2]:
+        pass
+
+    return insertion_idx
+
+
 def special_semi_global_alignment(s="", t=""):
     # maximum of 10 gaps for each sequence
     m = len(s) + 1
@@ -89,7 +121,7 @@ def special_semi_global_alignment(s="", t=""):
     for i in range(m-1):
         for j in range(n-1):
             if np.abs(i-j) > 10:
-                A[i,j,0] = -
+                #A[i,j,0] = -
                 break
             # b_gap_direction = False
             # MATCH
@@ -159,9 +191,21 @@ def read_fasta(path="ebolasequences-1.fasta"):
     return sequence_list
 
 
-[str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
-# str7 = "ACAAGTAGCTA"
-# str8 = "GGTAGCTAG"
-
-print special_semi_global_alignment(s=str7,t=str8)
-
+if __name__ == '__main__':
+    # (a)
+    str1 = "ACAAGGA"
+    str2 = "ACAGG"
+    print global_alignment(s=str1, t=str2)
+    # (b)
+    str3 = "AGCCATTACCAATTAAGG"
+    str4 = "CCAATT"
+    print semi_global_alignment(s=str3, t=str4)
+    # (c)
+    str5 = "AGCCTTCCTAGGG"
+    str6 = "GCTTCGTTT"
+    print local_alignment(s=str5, t=str6)
+    # (d)
+    [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
+    # str7 = "ACAAGTAGCTA"
+    # str8 = "GGTAGCTAG"
+    print special_semi_global_alignment(s=str7,t=str8)
