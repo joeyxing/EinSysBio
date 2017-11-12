@@ -26,7 +26,7 @@ def myArgmax(l):
     for i in range(len(l)):
         if l[i] == m:
             r.append(i)
-    return r
+    return np.array(r)
 
 
 def global_alignment(s="", t=""):
@@ -75,16 +75,19 @@ def semi_global_alignment(s="", t=""):
     r.s = s
     r.t = t
     max_r = np.max(A[-1,1:]) # max of last row
-    argmax_r = np.argmax(A[-1,1:])+1 # argmax of last row
+    argmax_r = myArgmax(A[-1,1:])+1 # argmax of last row
     max_c = np.max(A[1:,-1]) # max of last column
-    argmax_c = np.argmax(A[1:,-1])+1 # argmax of last column
-    if max_r > max_c:
+    argmax_c = myArgmax(A[1:,-1])+1 # argmax of last column
+    
+    r.stop_list = []
+    if max_r >= max_c:
         r.score = max_r
-        r.stop = (m-1, argmax_r)
-    else: 
+        for i in range(len(argmax_r)):
+            r.stop_list.append((m-1,argmax_r[i]))
+    if max_r <= max_c: 
         r.score = max_c
-        r.stop = (argmax_c, n-1)
-    # r.start = (0, 0)    
+        for i in range(len(argmax_c)):
+            r.stop_list.append((argmax_c[i], n-1))
     return r
 
 
@@ -144,22 +147,22 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
         cost = MISMATCH
     
     insertion_pos = list()
-    b = list()
-    b.append(A[i,j-1]+GAP == A[i,j])     # b[0] from ->
-    b.append(A[i-1,j-1]+cost == A[i,j])  # b[1] from  \
-    b.append(A[i-1,j]+GAP == A[i,j])     # b[2] from  |
 
-    if b[0]:
+    b0 = A[i,j-1]+GAP == A[i,j]     # b[0] from ->
+    b1 = A[i-1,j-1]+cost == A[i,j]  # b[1] from  \
+    b2 = A[i-1,j]+GAP == A[i,j]     # b[2] from  |
+
+    if b0:
         insertion_pos0 = trace_back(A,i,j-1,s,t,alignment=alignment)
         for trace in insertion_pos0:
             trace[0].append(i)
         insertion_pos = insertion_pos + insertion_pos0
 
-    if b[1]:
+    if b1:
         insertion_pos1 = trace_back(A,i-1,j-1,s,t,alignment=alignment)
         insertion_pos = insertion_pos + insertion_pos1
 
-    if b[2]:
+    if b2:
         insertion_pos2 = trace_back(A,i-1,j,s,t,alignment=alignment)
         for trace in insertion_pos2:
             trace[1].append(j)
@@ -168,11 +171,12 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
     return insertion_pos
 
 
-def print_sequences(s, t, trace_list, insertSpaces=False):
+def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False):
     '''
     s: sequence 1
     t: sequence 2
     trace_list: insertion_pos list
+    count: number of different start point
     insertSpaces: global=false, semi-global=true, local=true
     '''
     for k in range(len(trace_list)):
@@ -198,16 +202,28 @@ def print_sequences(s, t, trace_list, insertSpaces=False):
             x.append(t)
         sequence2 = "-".join(x)
 
+        # if insertSpaces:
+        if trace[2][0] == 0:
+            sequence1 = " "*trace[2][1] + sequence1
+        else:
+            sequence2 = " "*trace[2][0] + sequence2
+
+            trace[2]
+            (stopi, stopj)
+
         bar = ""
-        bar_length = len(sequence1) if len(sequence1) < len(sequence2) else len(sequence2)
+        bar_length = (len(sequence1) if len(sequence1) < len(sequence2)
+                                     else len(sequence2))
         for i in range(bar_length):
             if sequence1[i] == sequence2[i]:
                 bar = bar + "|"
             elif sequence1[i] == "-" or sequence2[i] == "-":
                 bar = bar + " "
+            elif sequence1[i] == " " or sequence2[i] == " ":
+                bar = bar + " "
             else:
                 bar = bar + "x"
-        print "Trace%d:" % k
+        print "Trace{}:".format(count+k)
         print sequence1+"\n"+ bar + "\n" + sequence2
 
 
@@ -300,9 +316,12 @@ def main():
     # str2 = "ACAGGFTFCTA"
     ra = global_alignment(s=str1, t=str2)
     print "Score:", ra.score
-    insertion_idx_a = trace_back(ra.A, ra.stop[0], ra.stop[1], ra.s, ra.t, alignment=ra.alignment)
-    print insertion_idx_a
-    print_sequences(ra.s, ra.t, insertion_idx_a, insertSpaces=False)
+    trace_list_a = trace_back(ra.A, 
+                                 ra.stop[0], ra.stop[1],
+                                 ra.s, ra.t,
+                                 alignment=ra.alignment)
+    print trace_list_a
+    print_sequences(ra.s, ra.t, trace_list_a, 0, 0, count=0, insertSpaces=False)
 
     print "(b):"
     str3 = "AGCCAATTACCAATTAAGG"
@@ -310,14 +329,24 @@ def main():
     rb = semi_global_alignment(s=str3, t=str4)
     print "Score:", rb.score
     # print rb.A
-    insertion_idx_b = trace_back(rb.A, rb.stop[0], rb.stop[1], rb.s, rb.t, alignment=rb.alignment)
-    print insertion_idx_b
-    print_sequences(rb.s, rb.t, insertion_idx_b, insertSpaces=False)
+    n = 0
+    for i in range(len(rb.stop_list)):
+        trace_list_b = trace_back(rb.A,
+                                     rb.stop_list[i][0], rb.stop_list[i][1],
+                                     rb.s, rb.t,
+                                     alignment=rb.alignment)
+        print trace_list_b
+        print_sequences(rb.s, rb.t,
+                        trace_list_b, 
+                        rb.stop_list[i][0], rb.stop_list[i][1],
+                        count=n, insertSpaces=True)
+        n = n + len(trace_list_b)
 
     print "(c):"
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
     rc = local_alignment(s=str5, t=str6)
+    print rc.A
     print "Score:", rc.score
 
     # print "(d):"
@@ -327,6 +356,5 @@ def main():
     # print special_semi_global_alignment(s=str7,t=str8)
 
 if __name__ == "__main__":
-    # main()    
-    t = np.array([1,2,3,4,5,6,6,6,5,4,3,2,1])
-    print myArgmax(t)
+    main()    
+    
