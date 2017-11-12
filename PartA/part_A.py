@@ -35,7 +35,11 @@ def global_alignment(s="", t=""):
     r = return_object()
     r.A = A
     r.score = A[m-1,n-1]
-    return A[m-1,n-1]
+    r.start = (0, 0)
+    r.stop = (m-1, n-1)
+    r.s = s
+    r.t = t
+    return r
 
 
 def semi_global_alignment(s="", t=""):
@@ -75,40 +79,48 @@ def local_alignment(s="", t=""):
     return np.max(A[:,:])
 
 
-def trace_back(A, i, j,id=0):
+def trace_back(A, i, j, insertion_idx_list, id=0):
     '''
     A: score matrix
     i: index of str1 (row)
     j: index of str2 (column)
+    insertion_idx_list: list storing where to insert gap for each string
+                        each element is a list of size 2.
+                        Initially size = 1 (1 trace)
     id: which branch we are dealing with (multi-branch trace back)
     '''
     if i==0 and j==0:
-        return insertion_idx
+        return insertion_idx_list
 
     if str1[i] == str2[j]:
         cost = MATCH
     else:
         cost = MISMATCH
-    #                      str1    str2
-    # insertion_idx[0] = [list(), list()]
-    b[0] = (A[i,j-1]+GAP == A[i,j])     # from -
-    b[1] = (A[i-1,j-1]+cost == A[i,j])  # from \
-    b[2] = (A[i-1,j]+GAP == A[i,j])     # from |
+    #                           str1    str2
+    # insertion_idx_list[0] = [list(), list()]
+    b[0] = (A[i,j-1]+GAP == A[i,j])     # from --
+    b[1] = (A[i-1,j-1]+cost == A[i,j])  # from  \
+    b[2] = (A[i-1,j]+GAP == A[i,j])     # from  |
 
     if b[0] and not b[1] and not b[2]:
-        insertion_idx = trace_back(A,i,j-1,id=id)
-        insertion_idx[0] = insertion_idx[0]+[i]
+        insertion_idx_list = trace_back(A,i,j-1,id=id)
+        insertion_idx_list[0] = insertion_idx[0]+[i]
     elif not b[0] and b[1] and not b[2]:
-        insertion_idx = trace_back(A,i-1,j-1,id=id)
+        insertion_idx_list = trace_back(A,i-1,j-1,id=id)
     elif not b[0] and not b[1] and b[2]:
-        insertion_idx = trace_back(A,i-1,j,id=id)
-        insertion_idx[1] = insertion_idx[1]+[j]
+        insertion_idx_list = trace_back(A,i-1,j,id=id)
+        insertion_idx_list[1] = insertion_idx[1]+[j]
     elif not b[0] and b[1] and b[2]:
         pass
     elif b[0] and b[1] and not b[2]:
         pass
+    elif b[0] and not b[1] and b[2]:
+        pass
+    elif b[0] and b[1] and b[2]:
+        pass
+    
 
-    return insertion_idx
+    return insertion_idx_list
 
 
 def special_semi_global_alignment(s="", t=""):
