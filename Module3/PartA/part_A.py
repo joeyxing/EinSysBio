@@ -18,7 +18,7 @@ class return_object(object):
 def global_alignment(s="", t=""):
     m = len(s) + 1
     n = len(t) + 1
-    A = np.zeros([m, n])
+    A = np.zeros([m, n], dtype=np.int32)
 
     for i in range(m):
         A[i, 0] = i*GAP
@@ -33,19 +33,21 @@ def global_alignment(s="", t=""):
                 A[i+1, j+1] = np.max([A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP])
 
     r = return_object()
+    r.alignment = "global"
     r.A = A
+    r.s = s
+    r.t = t
     r.score = A[m-1,n-1]
     r.start = (0, 0)
     r.stop = (m-1, n-1)
-    r.s = s
-    r.t = t
+
     return r
 
 
 def semi_global_alignment(s="", t=""):
     m = len(s) + 1
     n = len(t) + 1
-    A = np.zeros([m, n])
+    A = np.zeros([m, n], dtype=np.int32)
 
     for i in range(m-1):
         for j in range(n-1):
@@ -54,16 +56,23 @@ def semi_global_alignment(s="", t=""):
             else:
                 A[i+1, j+1] = max(A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
     r = return_object()
+    r.alignment = "semi"
     r.A = A
+    r.s = s
+    r.t = t
     r.score = max(max(A[m-1,1:]), max(A[1:,n-1]))
-    r.stop = (1,2)
-    return max(max(A[m-1,1:]), max(A[1:,n-1]))
+    # 
+    r.start = (0, 0)
+    # 
+    r.stop = (m-1, n-1)
+    
+    return r
 
 
 def local_alignment(s="", t=""):
     m = len(s) + 1
     n = len(t) + 1
-    A = np.zeros([m, n])
+    A = np.zeros([m, n], dtype=np.int32)
 
     for i in range(m-1):
         for j in range(n-1):
@@ -72,14 +81,17 @@ def local_alignment(s="", t=""):
             else:
                 A[i+1, j+1] = max(0, A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
     r = return_object()
+    r.alignment = "local"
     r.A = A
-    r.score = max(max(A[m-1,1:]), max(A[1:,n-1]))
-    r.start = (1,2)
-    r.stop = (1,2)
-    return np.max(A[:,:])
+    r.score = np.max(A[:,:])
+    r.start = (0, 0)
+    r.stop = (m-1, n-1)
+    r.s = s
+    r.t = t
+    return r
 
 
-def trace_back(A, i, j, s, t, ei=0, ej=0):
+def trace_back(A, i, j, s, t, alignment):
     '''
     A: score matrix
     i: current index of str1 (row)
@@ -89,38 +101,60 @@ def trace_back(A, i, j, s, t, ei=0, ej=0):
     ei: row of end point
     ej: column of end point
     '''
-    if i==ei and j==ej:
-        # TODO dimension of insertion_pos
-        insertion_pos = [[list(),list()]]
-        return insertion_pos
+    if alignment == "global":
+        if i==0 and j==0:
+            # TODO dimension of insertion_pos
+            insertion_pos = [[list(),list()]]
+            return insertion_pos
+        else:
+            insertion_pos = list()
+    elif alignment == "semi":
+        if i==0 or j==0:
+            # TODO dimension of insertion_pos
+            insertion_pos = [[list(),list()]]
+            return insertion_pos
+        else:
+            insertion_pos = list()
+    # local alignment
+    elif alignment == "local":
+        if i==0 or j==0:
+            # TODO dimension of insertion_pos
+            insertion_pos = [[list(),list()]]
+            return insertion_pos
+        else:
+            insertion_pos = list()
     else:
-        insertion_pos = list()
+        print "Error: unknow alignment method."
+        return
+
     if s[i-1] == t[j-1]:
         cost = MATCH
     else:
         cost = MISMATCH
+
     b = list()
     b.append(A[i,j-1]+GAP == A[i,j])     # b[0] from ->
     b.append(A[i-1,j-1]+cost == A[i,j])  # b[1] from  \
     b.append(A[i-1,j]+GAP == A[i,j])     # b[2] from  |
 
     if b[0]:
-        insertion_pos0 = trace_back(A,i,j-1,s,t)
+        insertion_pos0 = trace_back(A,i,j-1,s,t,alignment)
         for trace in insertion_pos0:
             trace[0].append(i)
         insertion_pos = insertion_pos + insertion_pos0
 
     if b[1]:
-        insertion_pos1 = trace_back(A,i-1,j-1,s,t)
+        insertion_pos1 = trace_back(A,i-1,j-1,s,t,alignment)
         insertion_pos = insertion_pos + insertion_pos1
 
     if b[2]:
-        insertion_pos2 = trace_back(A,i-1,j,s,t)
+        insertion_pos2 = trace_back(A,i-1,j,s,t,alignment)
         for trace in insertion_pos2:
             trace[1].append(j)
         insertion_pos = insertion_pos + insertion_pos2
 
     return insertion_pos
+
 
 def print_sequences(s, t, trace_list, insertSpaces=False):
     '''
@@ -246,25 +280,27 @@ def read_fasta(path="ebolasequences-1.fasta"):
 
 if __name__ == "__main__":
     print "(a):"
-    str3 = "ACAAGGA"
-    str4 = "ACAGG"
-    # str3 = "ACAAGAGCGTAGA"
-    # str4 = "ACAGGFTFCTA"
-    r = global_alignment(s=str3, t=str4)
-    insertion_idx = trace_back(r.A, r.stop[0], r.stop[1], r.s, r.t)
-    print insertion_idx
-    print_sequences(str3, str4, insertion_idx)
+    str1 = "ACAAGGA"
+    str2 = "ACAGG"
+    # str1 = "ACAAGAGCGTAGA"
+    # str2 = "ACAGGFTFCTA"
+    r = global_alignment(s=str1, t=str2)
+    print r.score
+    insertion_idx = trace_back(r.A, r.stop[0], r.stop[1], r.s, r.t, r.alignment)
+    print_sequences(r.s, r.t, insertion_idx)
 
     print "(b):"
     str3 = "AGCCATTACCAATTAAGG"
     str4 = "CCAATT"
-    print semi_global_alignment(s=str3, t=str4)
+    rb = semi_global_alignment(s=str3, t=str4)
+    print rb.score
     
     print "(c):"
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
-    print local_alignment(s=str5, t=str6)
-    
+    rc = local_alignment(s=str5, t=str6)
+    print rc.score
+
     print "(d):"
     # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
     str7 = "ACAAGTAGCTA"
