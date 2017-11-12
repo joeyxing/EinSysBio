@@ -21,10 +21,12 @@ def myArgmax(l):
     i.e. myArgmax([1,2,3,4,5,5,5,3,2,1]) = [4,5,6]
     l: iterable
     '''
-    r = [np.argmax(l)]
-    for i in range(r,len(l)):
-        if l[i] == l[r[0]]:
+    m = np.max(l)
+    r = []
+    for i in range(len(l)):
+        if l[i] == m:
             r.append(i)
+    return r
 
 
 def global_alignment(s="", t=""):
@@ -325,4 +327,6 @@ def main():
     # print special_semi_global_alignment(s=str7,t=str8)
 
 if __name__ == "__main__":
-    main()    
+    # main()    
+    t = np.array([1,2,3,4,5,6,6,6,5,4,3,2,1])
+    print myArgmax(t)
