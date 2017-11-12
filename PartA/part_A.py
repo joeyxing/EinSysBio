@@ -79,48 +79,75 @@ def local_alignment(s="", t=""):
     return np.max(A[:,:])
 
 
-def trace_back(A, i, j, insertion_idx_list, id=0):
+def trace_back(A, i, j, s, t, ei=0, ej=0):
     '''
     A: score matrix
-    i: index of str1 (row)
-    j: index of str2 (column)
-    insertion_idx_list: list storing where to insert gap for each string
-                        each element is a list of size 2.
-                        Initially size = 1 (1 trace)
-    id: which branch we are dealing with (multi-branch trace back)
+    i: current index of str1 (row)
+    j: current index of str2 (column)
+    s: sequence 1
+    t: sequecne 2
+    ei: row of end point
+    ej: column of end point
     '''
-    if i==0 and j==0:
-        return insertion_idx_list
+    if i==ei and j==ej:
+        # TODO dimension of insertion_pos
+        insertion_pos = [[list(),list()]]
+        return insertion_pos
 
-    if str1[i] == str2[j]:
+    if s[i-1] == t[j-1]:
         cost = MATCH
     else:
         cost = MISMATCH
-    #                           str1    str2
-    # insertion_idx_list[0] = [list(), list()]
-    b[0] = (A[i,j-1]+GAP == A[i,j])     # from --
-    b[1] = (A[i-1,j-1]+cost == A[i,j])  # from  \
-    b[2] = (A[i-1,j]+GAP == A[i,j])     # from  |
+    b = list()
+    b.append(A[i,j-1]+GAP == A[i,j])     # b[0] from ->
+    b.append(A[i-1,j-1]+cost == A[i,j])  # b[1] from  \
+    b.append(A[i-1,j]+GAP == A[i,j])     # b[2] from  |
 
     if b[0] and not b[1] and not b[2]:
-        insertion_idx_list = trace_back(A,i,j-1,id=id)
-        insertion_idx_list[0] = insertion_idx[0]+[i]
-    elif not b[0] and b[1] and not b[2]:
-        insertion_idx_list = trace_back(A,i-1,j-1,id=id)
-    elif not b[0] and not b[1] and b[2]:
-        insertion_idx_list = trace_back(A,i-1,j,id=id)
-        insertion_idx_list[1] = insertion_idx[1]+[j]
-    elif not b[0] and b[1] and b[2]:
-        pass
-    elif b[0] and b[1] and not b[2]:
-        pass
-    elif b[0] and not b[1] and b[2]:
-        pass
-    elif b[0] and b[1] and b[2]:
-        pass
-    
+        insertion_pos = trace_back(A,i,j-1,s,t)
+        for trace in insertion_pos:
+            trace[0].append(i)
 
-    return insertion_idx_list
+    elif not b[0] and b[1] and not b[2]:
+        insertion_pos = trace_back(A,i-1,j-1,s,t)
+
+    elif not b[0] and not b[1] and b[2]:
+        insertion_pos = trace_back(A,i-1,j,s,t)
+        for trace in insertion_pos:
+            trace[1].append(j)
+
+    elif not b[0] and b[1] and b[2]:
+        insertion_pos2 = trace_back(A,i-1,j,s,t)
+        for trace in insertion_pos2:
+            trace[1].append(j)
+        insertion_pos = insertion_pos2 + trace_back(A,i-1,j-1,s,t)
+
+    elif b[0] and b[1] and not b[2]:
+        insertion_pos0 = trace_back(A,i,j-1,s,t)
+        for trace in insertion_pos0:
+            trace[0].append(i)
+        insertion_pos = insertion_pos0 + trace_back(A,i-1,j-1,s,t)
+
+    elif b[0] and not b[1] and b[2]:
+        insertion_pos0 = trace_back(A,i,j-1,s,t)
+        for trace in insertion_pos0:
+            trace[1].append(j)
+        insertion_pos2 = trace_back(A,i-1,j,s,t)
+        for trace in insertion_pos2:
+            trace[0].append(i)
+        insertion_pos = insertion_pos0 + insertion_pos2
+
+    elif b[0] and b[1] and b[2]:
+        insertion_pos0 = trace_back(A,i,j-1,s,t)
+        for trace in insertion_pos1:
+            trace[1].append(j)
+        insertion_pos2 = trace_back(A,i-1,j,s,t)
+        for trace in insertion_pos2:
+            trace[0].append(i)
+        insertion_pos = insertion_pos0 + insertion_pos2 +\
+                        trace_back(A,i-1,j-1,s,t)
+
+    return insertion_pos
 
 
 def special_semi_global_alignment(s="", t=""):
