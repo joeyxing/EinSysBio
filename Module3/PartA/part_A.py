@@ -226,7 +226,7 @@ def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False)
             if sequence1[i] == sequence2[i]:
                 bar = bar + "|"
             elif sequence1[i] == "-" or sequence2[i] == "-":
-                bar = bar + " "
+                bar = bar + "-"
             elif sequence1[i] == " " or sequence2[i] == " ":
                 bar = bar + " "
             else:
