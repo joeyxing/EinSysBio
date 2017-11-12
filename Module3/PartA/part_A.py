@@ -106,8 +106,11 @@ def local_alignment(s="", t=""):
     r.alignment = "local"
     r.A = A
     r.score = np.max(A[:,:])
-    # r.start = (0, 0)
-    r.stop = (m-1, n-1)
+    # TODO find all stop point in matrix
+    r.stop_list = []
+    r.stop_list.append(np.unravel_index(np.argmax(A), A.shape))
+    # r.start: need to be found out by trace_back
+    
     r.s = s
     r.t = t
     return r
@@ -134,6 +137,7 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
             return insertion_pos
     # local alignment
     elif alignment == "local":
+        # pass
         if i==ei and j==ej:
             insertion_pos = [[list(),list(), (i, j)]]
             return insertion_pos
@@ -152,22 +156,26 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
     b1 = A[i-1,j-1]+cost == A[i,j]  # b[1] from  \
     b2 = A[i-1,j]+GAP == A[i,j]     # b[2] from  |
 
-    if b0:
+    if b0: # if previous is from left
         insertion_pos0 = trace_back(A,i,j-1,s,t,alignment=alignment)
         for trace in insertion_pos0:
             trace[0].append(i)
         insertion_pos = insertion_pos + insertion_pos0
 
-    if b1:
+    if b1: # if previous is from upper-left
         insertion_pos1 = trace_back(A,i-1,j-1,s,t,alignment=alignment)
         insertion_pos = insertion_pos + insertion_pos1
 
-    if b2:
+    if b2: # if previous if from upper
         insertion_pos2 = trace_back(A,i-1,j,s,t,alignment=alignment)
         for trace in insertion_pos2:
             trace[1].append(j)
         insertion_pos = insertion_pos + insertion_pos2
-
+    
+    # stop recursive for local alignment
+    if not b0 and not b1 and not b2 and A[i,j] == 0:
+        insertion_pos = [[list(),list(), (i, j)]] 
+    
     return insertion_pos
 
 
@@ -309,11 +317,10 @@ def read_fasta(path="ebolasequences-1.fasta"):
 
 
 def main():
-    print "(a):"
+    # Part A.(a):
+    print "\n(a):"
     str1 = "ACAAGGA"
     str2 = "ACAGG"
-    # str1 = "ACAAGAGCGTAGA"
-    # str2 = "ACAGGFTFCTA"
     ra = global_alignment(s=str1, t=str2)
     print "Score:", ra.score
     trace_list_a = trace_back(ra.A, 
@@ -323,12 +330,13 @@ def main():
     print trace_list_a
     print_sequences(ra.s, ra.t, trace_list_a, 0, 0, count=0, insertSpaces=False)
 
-    print "(b):"
+    # Part A.(b):
+    print "\n(b):"
     str3 = "AGCCAATTACCAATTAAGG"
     str4 = "CCAATT"
     rb = semi_global_alignment(s=str3, t=str4)
     print "Score:", rb.score
-    # print rb.A
+
     n = 0
     for i in range(len(rb.stop_list)):
         trace_list_b = trace_back(rb.A,
@@ -342,13 +350,18 @@ def main():
                         count=n, insertSpaces=True)
         n = n + len(trace_list_b)
 
-    print "(c):"
+    # Part A.(c):
+    print "\n(c):"
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
     rc = local_alignment(s=str5, t=str6)
-    print rc.A
     print "Score:", rc.score
-
+    trace_list_c = trace_back(rc.A,
+                      rc.stop_list[0][0], rc.stop_list[0][1],
+                      rc.s, rc.t,
+                      alignment=rc.alignment)
+    print trace_list_c
+    # Part A.(d):
     # print "(d):"
     # # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
     # str7 = "ACAAGTAGCTA"
@@ -356,5 +369,4 @@ def main():
     # print special_semi_global_alignment(s=str7,t=str8)
 
 if __name__ == "__main__":
-    main()    
-    
+    main()
