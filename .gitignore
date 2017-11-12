@@ -6,5 +6,5 @@
 *.pdf
 .vscode/
 *.fasta
-Notebooks/.ipynb_checkpoints/
+Module3/Notebooks/.ipynb_checkpoints/
 
