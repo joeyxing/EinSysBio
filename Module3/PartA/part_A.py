@@ -91,7 +91,7 @@ def local_alignment(s="", t=""):
     return r
 
 
-def trace_back(A, i, j, s, t, alignment):
+def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
     '''
     A: score matrix
     i: current index of str1 (row)
@@ -102,29 +102,26 @@ def trace_back(A, i, j, s, t, alignment):
     ej: column of end point
     '''
     if alignment == "global":
-        if i==0 and j==0:
-            # TODO dimension of insertion_pos
+        if i==0 and j==0: # and!
             insertion_pos = [[list(),list()]]
             return insertion_pos
         else:
             insertion_pos = list()
     elif alignment == "semi":
-        if i==0 or j==0:
-            # TODO dimension of insertion_pos
+        if i==0 or j==0: # or!
             insertion_pos = [[list(),list()]]
             return insertion_pos
         else:
             insertion_pos = list()
     # local alignment
     elif alignment == "local":
-        if i==0 or j==0:
-            # TODO dimension of insertion_pos
+        if i==ei and j==ej:
             insertion_pos = [[list(),list()]]
             return insertion_pos
         else:
             insertion_pos = list()
     else:
-        print "Error: unknow alignment method."
+        print "Function `trace_back` Error: unknow alignment method."
         return
 
     if s[i-1] == t[j-1]:
@@ -138,17 +135,17 @@ def trace_back(A, i, j, s, t, alignment):
     b.append(A[i-1,j]+GAP == A[i,j])     # b[2] from  |
 
     if b[0]:
-        insertion_pos0 = trace_back(A,i,j-1,s,t,alignment)
+        insertion_pos0 = trace_back(A,i,j-1,s,t,alignment=alignment)
         for trace in insertion_pos0:
             trace[0].append(i)
         insertion_pos = insertion_pos + insertion_pos0
 
     if b[1]:
-        insertion_pos1 = trace_back(A,i-1,j-1,s,t,alignment)
+        insertion_pos1 = trace_back(A,i-1,j-1,s,t,alignment=alignment)
         insertion_pos = insertion_pos + insertion_pos1
 
     if b[2]:
-        insertion_pos2 = trace_back(A,i-1,j,s,t,alignment)
+        insertion_pos2 = trace_back(A,i-1,j,s,t,alignment=alignment)
         for trace in insertion_pos2:
             trace[1].append(j)
         insertion_pos = insertion_pos + insertion_pos2
@@ -203,6 +200,7 @@ def special_semi_global_alignment(s="", t=""):
     m = len(s) + 1
     n = len(t) + 1
     # 3rd dim: [cost, num of gaps for t, num of gaps for s]
+    # TODO separate A(np.int32) and gap record matrix(np.int8)
     A = np.zeros([m, n, 3],dtype=np.int16)
 
     for i in range(m-1):
@@ -284,10 +282,10 @@ if __name__ == "__main__":
     str2 = "ACAGG"
     # str1 = "ACAAGAGCGTAGA"
     # str2 = "ACAGGFTFCTA"
-    r = global_alignment(s=str1, t=str2)
-    print r.score
-    insertion_idx = trace_back(r.A, r.stop[0], r.stop[1], r.s, r.t, r.alignment)
-    print_sequences(r.s, r.t, insertion_idx)
+    ra = global_alignment(s=str1, t=str2)
+    print "Score:", ra.score
+    insertion_idx = trace_back(ra.A, ra.stop[0], ra.stop[1], ra.s, ra.t, alignment=ra.alignment)
+    print_sequences(ra.s, ra.t, insertion_idx, insertSpaces=False)
 
     print "(b):"
     str3 = "AGCCATTACCAATTAAGG"
@@ -299,10 +297,10 @@ if __name__ == "__main__":
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
     rc = local_alignment(s=str5, t=str6)
-    print rc.score
+    print "Score:", rc.score
 
-    print "(d):"
-    # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
-    str7 = "ACAAGTAGCTA"
-    str8 = "GGTAGCTAG"
-    print special_semi_global_alignment(s=str7,t=str8)
+    # print "(d):"
+    # # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
+    # str7 = "ACAAGTAGCTA"
+    # str8 = "GGTAGCTAG"
+    # print special_semi_global_alignment(s=str7,t=str8)
