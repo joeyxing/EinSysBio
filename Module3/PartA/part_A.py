@@ -122,6 +122,47 @@ def trace_back(A, i, j, s, t, ei=0, ej=0):
 
     return insertion_pos
 
+def print_sequences(s, t, trace_list, insertSpaces=False):
+    '''
+    s: sequence 1
+    t: sequence 2
+    trace_list: insertion_pos list
+    insertSpaces: global=false, semi-global=true, local=true
+    '''
+    for k in range(len(trace_list)):
+        trace = trace_list[k]
+        
+        x = list()
+        if trace[0]:
+            x.append(s[:trace[0][0]])
+            for i in range(len(trace[0])-1):
+                x.append(str1[trace[0][i]:trace[0][i+1]])
+            x.append(s[trace[0][-1]:])
+        else:
+            x.append(s)
+        sequence1 = "-".join(x)
+        
+        x = list()
+        if trace[1]:
+            x.append(t[:trace[1][0]])
+            for i in range(len(trace[1])-1):
+                x.append(t[trace[1][i]:trace[1][i+1]])
+            x.append(t[trace[1][-1]:])
+        else:
+            x.append(s)
+        sequence2 = "-".join(x)
+
+        bar = ""
+        for i in range(len(sequence1)):
+            if sequence1[i] == sequence2[i]:
+                bar = bar + "|"
+            elif sequence1[i] == "-" or sequence2[i] == "-":
+                bar = bar + " "
+            else:
+                bar = bar + "x"
+        print "Trace%d:" % k
+        print sequence1+"\n"+ bar + "\n" + sequence2
+
 
 def special_semi_global_alignment(s="", t=""):
     # maximum of 10 gaps for each sequence
@@ -204,55 +245,28 @@ def read_fasta(path="ebolasequences-1.fasta"):
 
 
 if __name__ == "__main__":
-    # (b)
+    print "(a):"
+    str3 = "ACAAGGA"
+    str4 = "ACAGG"
+    # str3 = "ACAAGAGCGTAGA"
+    # str4 = "ACAGGFTFCTA"
+    r = global_alignment(s=str3, t=str4)
+    insertion_idx = trace_back(r.A, r.stop[0], r.stop[1], r.s, r.t)
+    print insertion_idx
+    print_sequences(str3, str4, insertion_idx)
+
+    print "(b):"
     str3 = "AGCCATTACCAATTAAGG"
     str4 = "CCAATT"
     print semi_global_alignment(s=str3, t=str4)
-    # (c)
+    
+    print "(c):"
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
     print local_alignment(s=str5, t=str6)
-    # (d)
+    
+    print "(d):"
     # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
     str7 = "ACAAGTAGCTA"
     str8 = "GGTAGCTAG"
     print special_semi_global_alignment(s=str7,t=str8)
-
-    # (a)
-    str3 = "ACAAGGA"
-    str4 = "ACAGG"
-    r = global_alignment(s=str3, t=str4)
-    insertion_idx = trace_back(r.A, r.stop[0], r.stop[1], r.s, r.t)
-    print insertion_idx
-    for k in range(len(insertion_idx)):
-        trace = insertion_idx[k]
-        x = list()
-        if trace[0]:
-            x.append(str3[:trace[0][0]])
-            for i in range(len(trace[0])-1):
-                x.append(str1[trace[0][i]:trace[0][i+1]])
-            x.append(str3[trace[0][-1]:])
-        else:
-            x.append(str3)
-        str1 = "-".join(x)
-        # t (str4)
-        x = list()
-        if trace[1]:
-            x.append(str4[:trace[1][0]])
-            for i in range(len(trace[1])-1):
-                x.append(str4[trace[1][i]:trace[1][i+1]])
-            x.append(str4[trace[1][-1]:])
-        else:
-            x.append(str3)
-        str2 = "-".join(x)
-
-        print "Trace:%d" % k
-        print str1
-        bar = ""
-        for i in range(len(str1)):
-            if str1[i] == str2[i]:
-                bar = bar + "|"
-            else:
-                bar = bar + "x"
-        print bar
-        print str2
