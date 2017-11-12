@@ -93,7 +93,8 @@ def trace_back(A, i, j, s, t, ei=0, ej=0):
         # TODO dimension of insertion_pos
         insertion_pos = [[list(),list()]]
         return insertion_pos
-
+    else:
+        insertion_pos = list()
     if s[i-1] == t[j-1]:
         cost = MATCH
     else:
@@ -103,49 +104,21 @@ def trace_back(A, i, j, s, t, ei=0, ej=0):
     b.append(A[i-1,j-1]+cost == A[i,j])  # b[1] from  \
     b.append(A[i-1,j]+GAP == A[i,j])     # b[2] from  |
 
-    if b[0] and not b[1] and not b[2]:
-        insertion_pos = trace_back(A,i,j-1,s,t)
-        for trace in insertion_pos:
-            trace[0].append(i)
-
-    elif not b[0] and b[1] and not b[2]:
-        insertion_pos = trace_back(A,i-1,j-1,s,t)
-
-    elif not b[0] and not b[1] and b[2]:
-        insertion_pos = trace_back(A,i-1,j,s,t)
-        for trace in insertion_pos:
-            trace[1].append(j)
-
-    elif not b[0] and b[1] and b[2]:
-        insertion_pos2 = trace_back(A,i-1,j,s,t)
-        for trace in insertion_pos2:
-            trace[1].append(j)
-        insertion_pos = insertion_pos2 + trace_back(A,i-1,j-1,s,t)
-
-    elif b[0] and b[1] and not b[2]:
+    if b[0]:
         insertion_pos0 = trace_back(A,i,j-1,s,t)
         for trace in insertion_pos0:
             trace[0].append(i)
-        insertion_pos = insertion_pos0 + trace_back(A,i-1,j-1,s,t)
+        insertion_pos = insertion_pos + insertion_pos0
 
-    elif b[0] and not b[1] and b[2]:
-        insertion_pos0 = trace_back(A,i,j-1,s,t)
-        for trace in insertion_pos0:
-            trace[1].append(j)
+    if b[1]:
+        insertion_pos1 = trace_back(A,i-1,j-1,s,t)
+        insertion_pos = insertion_pos + insertion_pos1
+
+    if b[2]:
         insertion_pos2 = trace_back(A,i-1,j,s,t)
         for trace in insertion_pos2:
-            trace[0].append(i)
-        insertion_pos = insertion_pos0 + insertion_pos2
-
-    elif b[0] and b[1] and b[2]:
-        insertion_pos0 = trace_back(A,i,j-1,s,t)
-        for trace in insertion_pos1:
             trace[1].append(j)
-        insertion_pos2 = trace_back(A,i-1,j,s,t)
-        for trace in insertion_pos2:
-            trace[0].append(i)
-        insertion_pos = insertion_pos0 + insertion_pos2 +\
-                        trace_back(A,i-1,j-1,s,t)
+        insertion_pos = insertion_pos + insertion_pos2
 
     return insertion_pos
 
@@ -213,7 +186,7 @@ def special_semi_global_alignment(s="", t=""):
                     A[i+1,j+1,0] = A[i,j,0]+cost
                     A[i+1,j+1,1] = A[i,j,1]
                     A[i+1,j+1,2] = A[i,j,2]
-    print A[:,:,0]
+    # print A[:,:,0]
     return max(max(A[m-1,1:,0]), max(A[1:,n-1,0]))
 
 
@@ -230,11 +203,7 @@ def read_fasta(path="ebolasequences-1.fasta"):
     return sequence_list
 
 
-if __name__ == '__main__':
-    # (a)
-    str1 = "ACAAGGA"
-    str2 = "ACAGG"
-    print global_alignment(s=str1, t=str2)
+if __name__ == "__main__":
     # (b)
     str3 = "AGCCATTACCAATTAAGG"
     str4 = "CCAATT"
@@ -244,7 +213,46 @@ if __name__ == '__main__':
     str6 = "GCTTCGTTT"
     print local_alignment(s=str5, t=str6)
     # (d)
-    [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
-    # str7 = "ACAAGTAGCTA"
-    # str8 = "GGTAGCTAG"
+    # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
+    str7 = "ACAAGTAGCTA"
+    str8 = "GGTAGCTAG"
     print special_semi_global_alignment(s=str7,t=str8)
+
+    # (a)
+    str3 = "ACAAGGA"
+    str4 = "ACAGG"
+    r = global_alignment(s=str3, t=str4)
+    insertion_idx = trace_back(r.A, r.stop[0], r.stop[1], r.s, r.t)
+    print insertion_idx
+    for k in range(len(insertion_idx)):
+        trace = insertion_idx[k]
+        x = list()
+        if trace[0]:
+            x.append(str3[:trace[0][0]])
+            for i in range(len(trace[0])-1):
+                x.append(str1[trace[0][i]:trace[0][i+1]])
+            x.append(str3[trace[0][-1]:])
+        else:
+            x.append(str3)
+        str1 = "-".join(x)
+        # t (str4)
+        x = list()
+        if trace[1]:
+            x.append(str4[:trace[1][0]])
+            for i in range(len(trace[1])-1):
+                x.append(str4[trace[1][i]:trace[1][i+1]])
+            x.append(str4[trace[1][-1]:])
+        else:
+            x.append(str3)
+        str2 = "-".join(x)
+
+        print "Trace:%d" % k
+        print str1
+        bar = ""
+        for i in range(len(str1)):
+            if str1[i] == str2[i]:
+                bar = bar + "|"
+            else:
+                bar = bar + "x"
+        print bar
+        print str2
