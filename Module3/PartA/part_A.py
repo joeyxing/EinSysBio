@@ -15,6 +15,18 @@ class return_object(object):
         pass
 
 
+def myArgmax(l):
+    '''
+    find all the max index
+    i.e. myArgmax([1,2,3,4,5,5,5,3,2,1]) = [4,5,6]
+    l: iterable
+    '''
+    r = [np.argmax(l)]
+    for i in range(r,len(l)):
+        if l[i] == l[r[0]]:
+            r.append(i)
+
+
 def global_alignment(s="", t=""):
     m = len(s) + 1
     n = len(t) + 1
@@ -37,8 +49,8 @@ def global_alignment(s="", t=""):
     r.A = A
     r.s = s
     r.t = t
-    r.score = A[m-1,n-1]
-    r.start = (0, 0)
+    r.score = A[-1,-1]
+    # r.start = (0, 0)
     r.stop = (m-1, n-1)
 
     return r
@@ -60,12 +72,17 @@ def semi_global_alignment(s="", t=""):
     r.A = A
     r.s = s
     r.t = t
-    r.score = max(max(A[m-1,1:]), max(A[1:,n-1]))
-    # 
-    r.start = (0, 0)
-    # 
-    r.stop = (m-1, n-1)
-    
+    max_r = np.max(A[-1,1:]) # max of last row
+    argmax_r = np.argmax(A[-1,1:])+1 # argmax of last row
+    max_c = np.max(A[1:,-1]) # max of last column
+    argmax_c = np.argmax(A[1:,-1])+1 # argmax of last column
+    if max_r > max_c:
+        r.score = max_r
+        r.stop = (m-1, argmax_r)
+    else: 
+        r.score = max_c
+        r.stop = (argmax_c, n-1)
+    # r.start = (0, 0)    
     return r
 
 
@@ -84,7 +101,7 @@ def local_alignment(s="", t=""):
     r.alignment = "local"
     r.A = A
     r.score = np.max(A[:,:])
-    r.start = (0, 0)
+    # r.start = (0, 0)
     r.stop = (m-1, n-1)
     r.s = s
     r.t = t
@@ -100,26 +117,21 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
     t: sequecne 2
     ei: row of end point
     ej: column of end point
+    return: list of element [insertion pos of s, insertion pos of t, end point]
     '''
     if alignment == "global":
-        if i==0 and j==0: # and!
-            insertion_pos = [[list(),list()]]
+        if i==ei and j==ej: # and!
+            insertion_pos = [[list(),list(),(i, j)]]
             return insertion_pos
-        else:
-            insertion_pos = list()
     elif alignment == "semi":
-        if i==0 or j==0: # or!
-            insertion_pos = [[list(),list()]]
+        if i==ei or j==ej: # or!
+            insertion_pos = [[list(),list(), (i, j)]]
             return insertion_pos
-        else:
-            insertion_pos = list()
     # local alignment
     elif alignment == "local":
         if i==ei and j==ej:
-            insertion_pos = [[list(),list()]]
+            insertion_pos = [[list(),list(), (i, j)]]
             return insertion_pos
-        else:
-            insertion_pos = list()
     else:
         print "Function `trace_back` Error: unknow alignment method."
         return
@@ -128,7 +140,8 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
         cost = MATCH
     else:
         cost = MISMATCH
-
+    
+    insertion_pos = list()
     b = list()
     b.append(A[i,j-1]+GAP == A[i,j])     # b[0] from ->
     b.append(A[i-1,j-1]+cost == A[i,j])  # b[1] from  \
@@ -180,11 +193,12 @@ def print_sequences(s, t, trace_list, insertSpaces=False):
                 x.append(t[trace[1][i]:trace[1][i+1]])
             x.append(t[trace[1][-1]:])
         else:
-            x.append(s)
+            x.append(t)
         sequence2 = "-".join(x)
 
         bar = ""
-        for i in range(len(sequence1)):
+        bar_length = len(sequence1) if len(sequence1) < len(sequence2) else len(sequence2)
+        for i in range(bar_length):
             if sequence1[i] == sequence2[i]:
                 bar = bar + "|"
             elif sequence1[i] == "-" or sequence2[i] == "-":
@@ -276,7 +290,7 @@ def read_fasta(path="ebolasequences-1.fasta"):
     return sequence_list
 
 
-if __name__ == "__main__":
+def main():
     print "(a):"
     str1 = "ACAAGGA"
     str2 = "ACAGG"
@@ -284,15 +298,20 @@ if __name__ == "__main__":
     # str2 = "ACAGGFTFCTA"
     ra = global_alignment(s=str1, t=str2)
     print "Score:", ra.score
-    insertion_idx = trace_back(ra.A, ra.stop[0], ra.stop[1], ra.s, ra.t, alignment=ra.alignment)
-    print_sequences(ra.s, ra.t, insertion_idx, insertSpaces=False)
+    insertion_idx_a = trace_back(ra.A, ra.stop[0], ra.stop[1], ra.s, ra.t, alignment=ra.alignment)
+    print insertion_idx_a
+    print_sequences(ra.s, ra.t, insertion_idx_a, insertSpaces=False)
 
     print "(b):"
-    str3 = "AGCCATTACCAATTAAGG"
+    str3 = "AGCCAATTACCAATTAAGG"
     str4 = "CCAATT"
     rb = semi_global_alignment(s=str3, t=str4)
-    print rb.score
-    
+    print "Score:", rb.score
+    # print rb.A
+    insertion_idx_b = trace_back(rb.A, rb.stop[0], rb.stop[1], rb.s, rb.t, alignment=rb.alignment)
+    print insertion_idx_b
+    print_sequences(rb.s, rb.t, insertion_idx_b, insertSpaces=False)
+
     print "(c):"
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
@@ -304,3 +323,6 @@ if __name__ == "__main__":
     # str7 = "ACAAGTAGCTA"
     # str8 = "GGTAGCTAG"
     # print special_semi_global_alignment(s=str7,t=str8)
+
+if __name__ == "__main__":
+    main()    
