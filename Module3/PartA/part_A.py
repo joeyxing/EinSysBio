@@ -103,7 +103,7 @@ def local_alignment(s="", t=""):
                 A[i+1, j+1] = max(0, A[i,j]+MATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
             else:
                 A[i+1, j+1] = max(0, A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
-    
+
     r = return_object()
     r.alignment = "local"
     r.A = A
@@ -152,7 +152,7 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
         cost = MATCH
     else:
         cost = MISMATCH
-    
+
     insertion_pos = list()
 
     b0 = A[i,j-1]+GAP == A[i,j]     # b[0] from ->
@@ -174,24 +174,24 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
         for trace in insertion_pos2:
             trace[1].append(j)
         insertion_pos = insertion_pos + insertion_pos2
-    
+
     # TODO stop recursive for local alignment
     if not b0 and not b1 and not b2 and A[i,j] == 0:
         insertion_pos = [[list(),list(), (i, j)]] 
-    
+
     return insertion_pos
 
 
 def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False):
-    '''
+    """
     s: sequence 0
     t: sequence 1
     trace_list: insertion_pos list
-    stopi:
-    stopj:
+    stopi: end (right) index of sequence 0
+    stopj: end (right) index of sequence 1
     count: number of different start point
     insertSpaces: global=false, semi-global=true, local=true
-    '''
+    """
     for k in range(len(trace_list)):
         trace = trace_list[k]
         # deal with sequence 0 (s)
@@ -219,7 +219,7 @@ def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False)
             sequence0 = " "*(trace[2][1] - trace[2][0]) + sequence0
         else:
             sequence1 = " "*(trace[2][0] - trace[2][1]) + sequence1
-        # Bar TODO bar length
+
         bar = ""
         bar_length = (len(sequence0) - len(s) + stopi if len(sequence0) < len(sequence1)
                                      else len(sequence1) - len(t) + stopj)
@@ -321,7 +321,7 @@ def read_fasta(path="ebolasequences-1.fasta"):
     return sequence_list
 
 
-def alignment(s, t, method=""):
+def align_trace_print(s, t, method=""):
     if method == "global":
         r = global_alignment(s=s, t=t)
     elif method == "semi":
@@ -331,7 +331,7 @@ def alignment(s, t, method=""):
     else:
         print "Error! Unknown alignment method."
         return
-    
+
     print "Score:", r.score
 
     n = 0
@@ -354,13 +354,13 @@ def main():
     print "\n(a): Global Alignment"
     str1 = "ACAAGGA"
     str2 = "ACAGG"
-    alignment(str1, str2, method="global")
+    align_trace_print(str1, str2, method="global")
 
     # Part A.(b):
     print "\n(b): Semi-global Alignment"
     str3 = "AGCCAATTACCAATTAAGG"
     str4 = "CCAATT"
-    alignment(str3, str4, method="semi")
+    align_trace_print(str3, str4, method="semi")
 
     # Part A.(c):
     print "\n(c): Local Alignment"
@@ -370,7 +370,7 @@ def main():
     # str5 = "AGCCTTCTACTGCTAGGG"
     # str6 = "GCTTCGTACTGTTT"
     # TODO only use the longest subsequence
-    alignment(str5, str6, method="local")
+    align_trace_print(str5, str6, method="local")
 
     # # Part A.(d):
     # print "(d):"
