@@ -108,9 +108,11 @@ def local_alignment(s="", t=""):
     r.alignment = "local"
     r.A = A
     r.score = np.max(A[:,:])
-    # TODO find all stop point in matrix
+    l = np.where(A == r.score)
     r.stop_list = []
-    r.stop_list.append(np.unravel_index(np.argmax(A), A.shape))    
+    for i in range(len(l[0])):
+        r.stop_list.append((l[0][i], l[1][i]))
+    # r.stop_list.append(np.unravel_index(np.argmax(A), A.shape))    
     r.s = s
     r.t = t
 
@@ -182,8 +184,8 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
 
 def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False):
     '''
-    s: sequence 1
-    t: sequence 2
+    s: sequence 0
+    t: sequence 1
     trace_list: insertion_pos list
     stopi:
     stopj:
@@ -217,10 +219,10 @@ def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False)
             sequence0 = " "*(trace[2][1] - trace[2][0]) + sequence0
         else:
             sequence1 = " "*(trace[2][0] - trace[2][1]) + sequence1
-        # Bar
+        # Bar TODO bar length
         bar = ""
-        bar_length = (len(sequence0) if len(sequence0) < len(sequence1)
-                                     else len(sequence1))
+        bar_length = (len(sequence0) - len(s) + stopi if len(sequence0) < len(sequence1)
+                                     else len(sequence1) - len(t) + stopj)
         for i in range(bar_length):
             if sequence0[i] == sequence1[i]:
                 bar = bar + "|"
@@ -228,8 +230,8 @@ def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False)
                 bar = bar + "-"
             elif (sequence0[i] == " "
                   or sequence1[i] == " " 
-                  or i < max(trace[2][:])
-                  or i > min()):
+                  or i < max(trace[2][:])):
+                  #or i > min()):
                 bar = bar + " "
             else:
                 bar = bar + "x"
@@ -347,6 +349,7 @@ def alignment(s, t, method=""):
 
 
 def main():
+    print "System Biology Module 3 Part A"
     # Part A.(a):
     print "\n(a): Global Alignment"
     str1 = "ACAAGGA"
@@ -363,14 +366,19 @@ def main():
     print "\n(c): Local Alignment"
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
+    # test sequences
+    # str5 = "AGCCTTCTACTGCTAGGG"
+    # str6 = "GCTTCGTACTGTTT"
+    # TODO only use the longest subsequence
     alignment(str5, str6, method="local")
 
-    Part A.(d):
-    print "(d):"
-    # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
-    str7 = "ACAAGTAGCTA"
-    str8 = "GGTAGCTAG"
-    print special_semi_global_alignment(s=str7,t=str8)
+    # # Part A.(d):
+    # print "(d):"
+    # # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
+    # str7 = "ACAAGTAGCTA"
+    # str8 = "GGTAGCTAG"
+    # print special_semi_global_alignment(s=str7,t=str8)
 
 if __name__ == "__main__":
+    # TODO trace_back: stop recursion condition for local alignment
     main()
