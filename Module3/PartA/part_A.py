@@ -77,8 +77,8 @@ def semi_global_alignment(s="", t=""):
 
     max_r = np.max(A[-1,1:]) # max of last row
     argmax_r = myArgmax(A[-1,1:])+1 # argmax of last row
-    max_c = np.max(A[1:,-1]) # max of last column
-    argmax_c = myArgmax(A[1:,-1])+1 # argmax of last column
+    max_c = np.max(A[1:-1,-1]) # max of last column (exclude (m-1, n-1))
+    argmax_c = myArgmax(A[1:-1,-1])+1 # argmax of last column (exclude (m-1, n-1))
     r.stop_list = []
     if max_r >= max_c:
         r.score = max_r
@@ -355,29 +355,38 @@ def main():
     str1 = "ACAAGGA"
     str2 = "ACAGG"
     align_trace_print(str1, str2, method="global")
-
+    str1 = "ACAAGGAATGTACATCATTAGCTAGTCA"
+    str2 = "ACAGGACTATCGATGTCGATGCTAGT"
+    align_trace_print(str1, str2, method="global")
+    
     # Part A.(b):
     print "\n(b): Semi-global Alignment"
     str3 = "AGCCAATTACCAATTAAGG"
     str4 = "CCAATT"
+    align_trace_print(str3, str4, method="semi")
+    str3 = "AGCCAATTACCAATTAAGGCCTACATT"
+    str4 = "CCAACATT"
     align_trace_print(str3, str4, method="semi")
 
     # Part A.(c):
     print "\n(c): Local Alignment"
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
-    # test sequences
-    # str5 = "AGCCTTCTACTGCTAGGG"
-    # str6 = "GCTTCGTACTGTTT"
     # TODO only use the longest subsequence
     align_trace_print(str5, str6, method="local")
+    # test sequences
+    str5 = "AGCCTTCTACGCTAGGG"
+    str6 = "GCTTCGTACGTTT"
+    align_trace_print(str5, str6, method="local")
 
-    # # Part A.(d):
-    # print "(d):"
-    # # [str7,str8] = read_fasta(path="/home/joey/Work/systembiology/PartA/ebolasequences-1.fasta")
+    # Part A.(d):
+    print "(d):"
+    [str7,str8] = read_fasta(path="C:/Users/xwz20/Desktop/EinSysBio/Module3/PartA/ebolasequences-1.fasta")
+    print len(str7)
+    print len(str8)
     # str7 = "ACAAGTAGCTA"
     # str8 = "GGTAGCTAG"
-    # print special_semi_global_alignment(s=str7,t=str8)
+    print special_semi_global_alignment(s=str7,t=str8)
 
 if __name__ == "__main__":
     # TODO trace_back: stop recursion condition for local alignment
