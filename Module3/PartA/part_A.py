@@ -381,19 +381,11 @@ def main():
     str1 = "ACAAGGA"
     str2 = "ACAGG"
     align_trace_print(str1, str2, method="global")
-    # test
-    str1 = "ACAAGGAATGTACATCATTAGCTAGTCA"
-    str2 = "ACAGGACTATCGATGTCGATGCTAGT"
-    align_trace_print(str1, str2, method="global")
     
     # Part A.(b):
     print "\n(b): Semi-global Alignment"
     str3 = "AGCCAATTACCAATTAAGG"
     str4 = "CCAATT"
-    align_trace_print(str3, str4, method="semi")
-    # test
-    str3 = "AGCCAATTACCAATTAAGGCCTACATT"
-    str4 = "CCAACACTT"
     align_trace_print(str3, str4, method="semi")
 
     # Part A.(c):
@@ -401,18 +393,33 @@ def main():
     str5 = "AGCCTTCCTAGGG"
     str6 = "GCTTCGTTT"
     align_trace_print(str5, str6, method="local")
+
+    # Part A.(d):
+    print "(d):"
+    [str7,str8] = read_fasta(path="C:/Users/xwz20/Desktop/EinSysBio/Module3/PartA/ebolasequences-1.fasta")
+    print len(str7)
+    print len(str8)
+    print special_semi_global_alignment(s=str7,t=str8)
+
+
+def test():
+    # test
+    str1 = "ACAAGGAATGTACATCATTAGCTAGTCA"
+    str2 = "ACAGGACTATCGATGTCGATGCTAGT"
+    align_trace_print(str1, str2, method="global")
+
+    # test
+    str3 = "AGCCAATTACCAATTAAGGCCTACATT"
+    str4 = "CCAACACTT"
+    align_trace_print(str3, str4, method="semi")
+
     # test
     str5 = "AGCCTTCTACGCTAGGG"
     str6 = "GCTTCGTACGTTT"
     align_trace_print(str5, str6, method="local")
 
-    # Part A.(d):
-    print "(d):"
-    [str7,str8] = read_fasta(path="C:/Users/xwz20/Desktop/EinSysBio/Module3/PartA/ebolasequences-1.fasta")
-    # str7 = "AGCCAATTACCAATTAAGGCCTACATT"
-    # str8 = "CCAACACTT"
-    print len(str7)
-    print len(str8)
+    str7 = "AGCCAATTACCAATTAAGGCCTACATT"
+    str8 = "CCAACACTT"
     print special_semi_global_alignment(s=str7,t=str8)
 
 
