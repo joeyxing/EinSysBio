@@ -342,7 +342,7 @@ def align_trace_print(s, t, method=""):
     elif method == "local":
         r = local_alignment(s=s, t=t)
         # TODO
-        # trace_list = [[],
+        all_trace_list = list()
     else:
         print "Error! Unknown alignment method."
         return
@@ -355,10 +355,12 @@ def align_trace_print(s, t, method=""):
                                 r.stop_list[i][0], r.stop_list[i][1],
                                 r.s, r.t,
                                 alignment=r.alignment)
-        # if method == "local":
-        #     # TODO only use the longest subsequence
-        #     pass
-        #     continue
+        if method == "local":
+            # TODO only use the longest subsequence
+            for x in trace_list:
+                all_trace_list.append(x+
+                    [(r.stop_list[i][0], r.stop_list[i][1])])
+            continue
         print trace_list
         print_sequences(r.s, r.t,
                         trace_list, 
@@ -366,11 +368,23 @@ def align_trace_print(s, t, method=""):
                         count=n, insertSpaces=True)
         n = n + len(trace_list)
     
-    # if method == "local":
-    #     # TODO
-    #     print trace_list_2
-    #     for i in range(len(trace_list_2)):
-    #         pass
+    if method == "local":
+        # Only print the longest sequence(s)
+        max_subseq_len = 0
+        final_list = []
+        for x in all_trace_list:
+            subseq_len = max(x[3][1]-x[2][1],
+                             x[3][0]-x[2][1])
+            if subseq_len > max_subseq_len:
+                max_subseq_len = subseq_len
+                final_list = [x]
+            elif subseq_len == max_subseq_len:
+                final_list.append(x)
+        for x in final_list:
+            print_sequences(r.s, r.t,
+                            [x],
+                            x[3][0], x[3][1],
+                            count=0)
 
 
 def main():
