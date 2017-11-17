@@ -440,5 +440,5 @@ def test():
 
 if __name__ == "__main__":
     # TODO: improve docstring
-    test()
+    main()
 
