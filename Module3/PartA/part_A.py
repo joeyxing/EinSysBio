@@ -182,7 +182,7 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
     return insertion_pos
 
 
-def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False):
+def print_sequences(s, t, trace_list, stopi, stopj, count=0):
     """
     s: sequence 0
     t: sequence 1
@@ -190,7 +190,6 @@ def print_sequences(s, t, trace_list, stopi, stopj, count=0, insertSpaces=False)
     stopi: end (right) index of sequence 0
     stopj: end (right) index of sequence 1
     count: number of different start point
-    insertSpaces: global=false, semi-global=true, local=true
     """
     for k in range(len(trace_list)):
         trace = trace_list[k]
@@ -365,7 +364,7 @@ def align_trace_print(s, t, method=""):
         print_sequences(r.s, r.t,
                         trace_list, 
                         r.stop_list[i][0], r.stop_list[i][1],
-                        count=n, insertSpaces=True)
+                        count=n)
         n = n + len(trace_list)
     
     if method == "local":
