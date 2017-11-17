@@ -380,11 +380,13 @@ def align_trace_print(s, t, method=""):
                 final_list = [x]
             elif subseq_len == max_subseq_len:
                 final_list.append(x)
+        n = 0
         for x in final_list:
             print_sequences(r.s, r.t,
                             [x],
                             x[3][0], x[3][1],
-                            count=0)
+                            count=n)
+            n = n + 1
 
 
 def main():
@@ -428,16 +430,16 @@ def test():
     align_trace_print(str3, str4, method="semi")
 
     # test
-    str5 = "AGCCTTCTACGCTAGGG"
-    str6 = "GCTTCGTACGTTT"
+    str5 = "AGCCTTCTACGCTAGGCTAGGATCGTGATCGTAGCTAGGATGCTAGCAAGCTAGCACATCAGCAAACATCGACG"
+    str6 = "GCTTCGTACGCAGCTAGCCATTCAGCTAGCGGATCGACAGCATCGACTAGGCATCGATATTT"
     align_trace_print(str5, str6, method="local")
 
     str7 = "AGCCAATTACCAATTAAGGCCTACATT"
     str8 = "CCAACACTT"
-    print special_semi_global_alignment(s=str7,t=str8)
+    # print special_semi_global_alignment(s=str7,t=str8)
 
 
 if __name__ == "__main__":
     # TODO: improve docstring
-    main()
+    test()
 
