@@ -141,7 +141,7 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
     # local alignment
     elif alignment == "local":
         # pass
-        if i==ei and j==ej:
+        if i==ei or j==ej:
             insertion_pos = [[list(),list(), (i, j)]]
             return insertion_pos
     else:
