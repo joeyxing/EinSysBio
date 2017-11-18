@@ -1,4 +1,4 @@
-# Report on system biology module 3 part A
+# System biology module 3 part A
 
 ## General purpose functions
 
@@ -51,8 +51,8 @@ This function is nothing but a wrapper of the three alignment function,
 `trace_back` and `print_sequence` to make the programme more simple. It takes
 three arguments,
 
-`s`: sequence1\
-`t`: sequence2\
+`s`: sequence1
+`t`: sequence2
 `alignment`: string "global", "semi" or "local"
 
 ## (a) Global alignment
@@ -80,6 +80,16 @@ gaps for both sequences on a point.
 `A_gap[i, j, 0]` is the number of gaps for `s` to reach point `A[i, j]`.
 Similarly, `A_gap[i, j, 1]` is number of gaps for `t`
 
+No element in `A_gap` is greater than 10:
+
+```python
+print np.where(A_gap[:,:,0] > 10)
+print np.where(A_gap[:,:,1] > 10)
+
+(array([], dtype=int64), array([], dtype=int64))
+(array([], dtype=int64), array([], dtype=int64))
+```
+
 Since this is semi-global alignment and the gaps at the begining of the matrix
 don't have any cost, one cannot judge if the number of gaps at a point
 is over 10 without calculating it. Hence, the time complexity of the programme
@@ -90,34 +100,47 @@ $O(3 \cdot len(s) \cdot len(t)) =O(len(s) \cdot len(t))$
 
 ```txt
 System Biology Module 3 Part A
+
 (a): Global Alignment
 Score: 2
 [[[], [2, 5], (0, 0)], [[], [3, 5], (0, 0)]]
+
 Alignment0:
 ACAAGGA
 ||-|||-
 AC-AGG-
+
 Alignment1:
 ACAAGGA
 |||-||-
 ACA-GG-
+
 (b): Semi-global Alignment
 Score: 12
 [[[], [], (2, 0)]]
+
 Alignment0:
 AGCCAATTACCAATTAAGG
   ||||||
   CCAATT
 [[[], [], (9, 0)]]
+
 Alignment1:
 AGCCAATTACCAATTAAGG
          ||||||
          CCAATT
+
 (c): Local Alignment
 Score: 9
+
 Alignment0:
 AGCCTTCCTAGGG
    ||||x|
   GCTTCGTTT
 (d):
+18956
+18957
+(array([], dtype=int64), array([], dtype=int64))
+(array([], dtype=int64), array([], dtype=int64))
+37248
 ```
