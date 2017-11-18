@@ -267,7 +267,7 @@ def special_semi_global_alignment(s="", t=""):
             #### gap for "s" 
             elif np.argmax([A[i,j]+cost, A[i+1,j]+GAP, A[i,j+1]+GAP]) == 1:
                 #  if "gap for s" <= max_gap, then, increase "gap for s" --
-                if A_gap[i+1,j,1] + 1 <= max_gap:
+                if A_gap[i+1,j,0] + 1 <= max_gap:
                     A[i+1,j+1] = A[i+1,j] + GAP
                     A_gap[i+1,j+1,0] = A_gap[i+1,j,0] + 1
                     A_gap[i+1,j+1,1] = A_gap[i+1,j,1]
@@ -411,7 +411,7 @@ def main():
 
     # Part A.(d):
     print "(d):"
-    [str7,str8] = read_fasta(path="C:/Users/xwz20/Desktop/EinSysBio/Module3/PartA/ebolasequences-1.fasta")
+    [str7,str8] = read_fasta(path="/home/joey/Work/EinSysBio/Module3/PartA/ebolasequences-1.fasta")
     print len(str7)
     print len(str8)
     print special_semi_global_alignment(s=str7,t=str8)
