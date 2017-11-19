@@ -42,16 +42,16 @@ def global_alignment(s="", t=""):
     for i in range(m-1):
         for j in range(n-1):
             if s[i] == t[j]:
-                A[i+1, j+1] = np.max([A[i,j]+MATCH, A[i,j+1]+GAP, A[i+1,j]+GAP])
+                A[i+1, j+1] = np.max([A[i, j]+MATCH, A[i, j+1]+GAP, A[i+1, j]+GAP])
             else:
-                A[i+1, j+1] = np.max([A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP])
+                A[i+1, j+1] = np.max([A[i, j]+MISMATCH, A[i, j+1]+GAP, A[i+1, j]+GAP])
 
     r = return_object()
     r.alignment = "global"
     r.A = A
     r.s = s
     r.t = t
-    r.score = A[-1,-1]
+    r.score = A[-1, -1]
     r.stop_list = [(m-1, n-1)]
 
     return r
@@ -65,26 +65,26 @@ def semi_global_alignment(s="", t=""):
     for i in range(m-1):
         for j in range(n-1):
             if s[i] == t[j]:
-                A[i+1, j+1] = max(A[i,j]+MATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
+                A[i+1, j+1] = max(A[i, j]+MATCH, A[i, j+1]+GAP, A[i+1, j]+GAP)
             else:
-                A[i+1, j+1] = max(A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
-    
+                A[i+1, j+1] = max(A[i, j]+MISMATCH, A[i, j+1]+GAP, A[i+1, j]+GAP)
+
     r = return_object()
     r.alignment = "semi"
     r.A = A
     r.s = s
     r.t = t
 
-    max_r = np.max(A[-1,1:]) # max of last row
-    argmax_r = myArgmax(A[-1,1:])+1 # argmax of last row
-    max_c = np.max(A[1:-1,-1]) # max of last column (exclude (m-1, n-1))
-    argmax_c = myArgmax(A[1:-1,-1])+1 # argmax of last column (exclude (m-1, n-1))
+    max_r = np.max(A[-1, 1:]) # max of last row
+    argmax_r = myArgmax(A[-1, 1:])+1 # argmax of last row
+    max_c = np.max(A[1:-1, -1]) # max of last column (exclude (m-1, n-1))
+    argmax_c = myArgmax(A[1:-1, -1])+1 # argmax of last column (exclude (m-1, n-1))
     r.stop_list = []
     if max_r >= max_c:
         r.score = max_r
         for i in range(len(argmax_r)):
-            r.stop_list.append((m-1,argmax_r[i]))
-    if max_r <= max_c: 
+            r.stop_list.append((m-1, argmax_r[i]))
+    if max_r <= max_c:
         r.score = max_c
         for i in range(len(argmax_c)):
             r.stop_list.append((argmax_c[i], n-1))
@@ -100,19 +100,19 @@ def local_alignment(s="", t=""):
     for i in range(m-1):
         for j in range(n-1):
             if s[i] == t[j]:
-                A[i+1, j+1] = max(0, A[i,j]+MATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
+                A[i+1, j+1] = max(0, A[i, j]+MATCH, A[i, j+1]+GAP, A[i+1, j]+GAP)
             else:
-                A[i+1, j+1] = max(0, A[i,j]+MISMATCH, A[i,j+1]+GAP, A[i+1,j]+GAP)
+                A[i+1, j+1] = max(0, A[i, j]+MISMATCH, A[i, j+1]+GAP, A[i+1, j]+GAP)
 
     r = return_object()
     r.alignment = "local"
     r.A = A
-    r.score = np.max(A[:,:])
+    r.score = np.max(A[:, :])
     l = np.where(A == r.score)
     r.stop_list = []
     for i in range(len(l[0])):
         r.stop_list.append((l[0][i], l[1][i]))
-    # r.stop_list.append(np.unravel_index(np.argmax(A), A.shape))    
+    # r.stop_list.append(np.unravel_index(np.argmax(A), A.shape))
     r.s = s
     r.t = t
 
@@ -131,18 +131,18 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
     return: list of element [insertion pos of s, insertion pos of t, end(start) point]
     '''
     if alignment == "global":
-        if i==ei and j==ej: # and!
-            insertion_pos = [[list(),list(),(i, j)]]
+        if i == ei and j == ej: # and!
+            insertion_pos = [[list(), list(), (i, j)]]
             return insertion_pos
     elif alignment == "semi":
-        if i==ei or j==ej: # or!
-            insertion_pos = [[list(),list(), (i, j)]]
+        if i == ei or j == ej: # or!
+            insertion_pos = [[list(), list(), (i, j)]]
             return insertion_pos
     # local alignment
     elif alignment == "local":
         # pass
-        if i==ei or j==ej:
-            insertion_pos = [[list(),list(), (i, j)]]
+        if i == ei or j == ej:
+            insertion_pos = [[list(), list(), (i, j)]]
             return insertion_pos
     else:
         print "`trace_back` Error: unknow alignment method."
@@ -155,29 +155,29 @@ def trace_back(A, i, j, s, t, ei=0, ej=0, alignment=None):
 
     insertion_pos = list()
 
-    b0 = A[i,j-1]+GAP == A[i,j]     # b[0] from ->
-    b1 = A[i-1,j-1]+cost == A[i,j]  # b[1] from  \
-    b2 = A[i-1,j]+GAP == A[i,j]     # b[2] from  |
+    b0 = A[i, j-1]+GAP == A[i, j]     # b[0] from ->
+    b1 = A[i-1, j-1]+cost == A[i, j]  # b[1] from  \
+    b2 = A[i-1, j]+GAP == A[i, j]     # b[2] from  |
 
     if b0: # if previous is from left
-        insertion_pos0 = trace_back(A,i,j-1,s,t,alignment=alignment)
+        insertion_pos0 = trace_back(A, i, j-1, s, t, alignment=alignment)
         for trace in insertion_pos0:
             trace[0].append(i)
         insertion_pos = insertion_pos + insertion_pos0
 
     if b1: # if previous is from upper-left
-        insertion_pos1 = trace_back(A,i-1,j-1,s,t,alignment=alignment)
+        insertion_pos1 = trace_back(A, i-1, j-1, s, t, alignment=alignment)
         insertion_pos = insertion_pos + insertion_pos1
 
     if b2: # if previous if from upper
-        insertion_pos2 = trace_back(A,i-1,j,s,t,alignment=alignment)
+        insertion_pos2 = trace_back(A, i-1, j, s, t, alignment=alignment)
         for trace in insertion_pos2:
             trace[1].append(j)
         insertion_pos = insertion_pos + insertion_pos2
 
     # stop recursive for local alignment
-    if not b0 and not b1 and not b2 and A[i,j] == 0:
-        insertion_pos = [[list(),list(), (i, j)]] 
+    if not b0 and not b1 and not b2 and A[i, j] == 0:
+        insertion_pos = [[list(), list(), (i, j)]]
 
     return insertion_pos
 
@@ -221,14 +221,14 @@ def print_sequences(s, t, trace_list, stopi, stopj, count=0):
 
         bar = ""
         bar_length = (len(sequence0) - len(s) + stopi if len(sequence0) < len(sequence1)
-                                     else len(sequence1) - len(t) + stopj)
+                      else len(sequence1) - len(t) + stopj)
         for i in range(bar_length):
             if sequence0[i] == sequence1[i]:
                 bar = bar + "|"
             elif sequence0[i] == "-" or sequence1[i] == "-":
                 bar = bar + "-"
             elif (sequence0[i] == " "
-                  or sequence1[i] == " " 
+                  or sequence1[i] == " "
                   or i < max(trace[2][:])):
                   #or i > min()):
                 bar = bar + " "
@@ -244,10 +244,10 @@ def special_semi_global_alignment(s="", t=""):
     m = len(s) + 1
     n = len(t) + 1
     max_gap = 10
-    A = np.zeros([m, n],dtype=np.int32)
+    A = np.zeros([m, n], dtype=np.int32)
     # m, n, [gap for s, gap for t]
-    A_gap = np.zeros([m,n,2], dtype=np.int8)
-    
+    A_gap = np.zeros([m, n, 2], dtype=np.int8)
+
     for i in range(m-1):
         for j in range(n-1):
 
@@ -259,52 +259,56 @@ def special_semi_global_alignment(s="", t=""):
 
             # A[i,j]+cost is the first so that when equal cost occurs
             # always choose match or mismatch
-            if np.argmax([A[i,j]+cost, A[i+1,j]+GAP, A[i,j+1]+GAP]) == 0:
-                A[i+1,j+1] = A[i,j] + cost
-                A_gap[i+1,j+1,0] = A_gap[i,j,0]
-                A_gap[i+1,j+1,1] = A_gap[i,j,1]
+            if np.argmax([A[i, j]+cost, A[i+1, j]+GAP, A[i, j+1]+GAP]) == 0:
+                A[i+1, j+1] = A[i, j] + cost
+                A_gap[i+1, j+1, 0] = A_gap[i, j, 0]
+                A_gap[i+1, j+1, 1] = A_gap[i, j, 1]
 
-            #### gap for "s" 
-            elif np.argmax([A[i,j]+cost, A[i+1,j]+GAP, A[i,j+1]+GAP]) == 1:
+            #### gap for "s"
+            elif np.argmax([A[i, j]+cost, A[i+1, j]+GAP, A[i, j+1]+GAP]) == 1:
                 #  if "gap for s" <= max_gap, then, increase "gap for s" --
-                if A_gap[i+1,j,0] + 1 <= max_gap:
-                    A[i+1,j+1] = A[i+1,j] + GAP
-                    A_gap[i+1,j+1,0] = A_gap[i+1,j,0] + 1
-                    A_gap[i+1,j+1,1] = A_gap[i+1,j,1]
+                if A_gap[i+1, j, 0] + 1 <= max_gap:
+                    A[i+1, j+1] = A[i+1, j] + GAP
+                    A_gap[i+1, j+1, 0] = A_gap[i+1, j, 0] + 1
+                    A_gap[i+1, j+1, 1] = A_gap[i+1, j, 1]
 
-                # if "gap for s" > max_gap and "t+gap more than match" and "gap for t" <= max_gap
+                # if "gap for s" > max_gap
+                # and "t+gap more than match"
+                # and "gap for t" <= max_gap
                 # increase "gap for t" |
-                elif A[i,j]+cost < A[i,j+1]+GAP and A_gap[i,j+1,1] + 1 <= max_gap:
-                    A[i+1,j+1] = A[i,j+1] + GAP
-                    A_gap[i+1,j+1,0] = A_gap[i,j+1,0]
-                    A_gap[i+1,j+1,1] = A_gap[i,j+1,1] + 1
+                elif A[i, j]+cost < A[i, j+1]+GAP and A_gap[i, j+1, 1] + 1 <= max_gap:
+                    A[i+1, j+1] = A[i, j+1] + GAP
+                    A_gap[i+1, j+1, 0] = A_gap[i, j+1, 0]
+                    A_gap[i+1, j+1, 1] = A_gap[i, j+1, 1] + 1
 
                 # only match or mismatch direction is ok \
                 else:
-                    A[i+1,j+1] = A[i,j] + cost
-                    A_gap[i+1,j+1,0] = A_gap[i,j,0]
-                    A_gap[i+1,j+1,1] = A_gap[i,j,1]
+                    A[i+1, j+1] = A[i, j] + cost
+                    A_gap[i+1, j+1, 0] = A_gap[i, j, 0]
+                    A_gap[i+1, j+1, 1] = A_gap[i, j, 1]
 
             #### gap for "t"
-            elif np.argmax([A[i,j]+cost, A[i+1,j]+GAP, A[i,j+1]+GAP]) == 2:
+            elif np.argmax([A[i, j]+cost, A[i+1, j]+GAP, A[i, j+1]+GAP]) == 2:
                 # if "gap for t" <= max_gap, then, increase "gap for t"
-                if A_gap[i,j+1,1] + 1 <= max_gap:
-                    A[i+1,j+1] = A[i,j+1] + GAP
-                    A_gap[i+1,j+1,0] = A_gap[i,j+1,0]
-                    A_gap[i+1,j+1,1] = A_gap[i,j+1,1] + 1
+                if A_gap[i, j+1, 1] + 1 <= max_gap:
+                    A[i+1, j+1] = A[i, j+1] + GAP
+                    A_gap[i+1, j+1, 0] = A_gap[i, j+1, 0]
+                    A_gap[i+1, j+1, 1] = A_gap[i, j+1, 1] + 1
 
-                # if "gap for t" > max_gap and "s+gap more than (mis)match" and "gap for s" <= max_gap
+                # if "gap for t" > max_gap
+                # and "s+gap more than (mis)match"
+                # and "gap for s" <= max_gap
                 # increase "gap for s"
-                elif A[i,j]+cost < A[i+1,j]+GAP and A_gap[i+1,j,0] + 1 <= max_gap:
-                    A[i+1,j+1] = A[i+1,j] + GAP
-                    A_gap[i+1,j+1,0] = A_gap[i+1,j,0] + 1
-                    A_gap[i+1,j+1,1] = A_gap[i+1,j,1]
+                elif A[i, j]+cost < A[i+1, j]+GAP and A_gap[i+1, j, 0] + 1 <= max_gap:
+                    A[i+1, j+1] = A[i+1, j] + GAP
+                    A_gap[i+1, j+1, 0] = A_gap[i+1, j, 0] + 1
+                    A_gap[i+1, j+1, 1] = A_gap[i+1, j, 1]
 
                 # only match or mismatch direction is ok
                 else:
-                    A[i+1,j+1] = A[i,j] + cost
-                    A_gap[i+1,j+1,0] = A_gap[i,j,0]
-                    A_gap[i+1,j+1,1] = A_gap[i,j,1]
+                    A[i+1, j+1] = A[i, j] + cost
+                    A_gap[i+1, j+1, 0] = A_gap[i, j, 0]
+                    A_gap[i+1, j+1, 1] = A_gap[i, j, 1]
     # print A[:,:]
     # print A_gap[:,:,0]
     # print A_gap[:,:,1]
@@ -314,10 +318,10 @@ def special_semi_global_alignment(s="", t=""):
     #          if i in np.where(A_gap[1:-1,-1,1]<=max_gap)[0]]
     # print r1
     # print r2
-    print np.where(A_gap[:,:,0] > 10)
-    print np.where(A_gap[:,:,1] > 10)
+    print np.where(A_gap[:, :, 0] > 10)
+    print np.where(A_gap[:, :, 1] > 10)
 
-    return max(max(A[-1,1:]), max(A[1:-1,-1]))
+    return max(max(A[-1, 1:]), max(A[1:-1, -1]))
 
 
 def read_fasta(path="ebolasequences-1.fasta"):
@@ -357,16 +361,15 @@ def align_trace_print(s, t, method=""):
         if method == "local":
             # TODO only use the longest subsequence
             for x in trace_list:
-                all_trace_list.append(x+
-                    [(r.stop_list[i][0], r.stop_list[i][1])])
+                all_trace_list.append(x+[(r.stop_list[i][0], r.stop_list[i][1])])
             continue
         print trace_list
         print_sequences(r.s, r.t,
-                        trace_list, 
+                        trace_list,
                         r.stop_list[i][0], r.stop_list[i][1],
                         count=n)
         n = n + len(trace_list)
-    
+
     if method == "local":
         # Only print the longest sequence(s)
         max_subseq_len = 0
@@ -390,13 +393,13 @@ def align_trace_print(s, t, method=""):
 
 def main():
     print "System Biology Module 3 Part A"
-    
+
     # Part A.(a):
     print "\n(a): Global Alignment"
     str1 = "ACAAGGA"
     str2 = "ACAGG"
     align_trace_print(str1, str2, method="global")
-    
+
     # Part A.(b):
     print "\n(b): Semi-global Alignment"
     str3 = "AGCCAATTACCAATTAAGG"
@@ -411,10 +414,10 @@ def main():
 
     # Part A.(d):
     print "(d):"
-    [str7,str8] = read_fasta(path="/home/joey/Work/EinSysBio/Module3/PartA/ebolasequences-1.fasta")
+    [str7, str8] = read_fasta(path="/home/joey/Work/EinSysBio/Module3/PartA/ebolasequences-1.fasta")
     print len(str7)
     print len(str8)
-    print special_semi_global_alignment(s=str7,t=str8)
+    print special_semi_global_alignment(s=str7, t=str8)
 
 
 def test():
@@ -441,4 +444,3 @@ def test():
 if __name__ == "__main__":
     # TODO: improve docstring
     main()
-
