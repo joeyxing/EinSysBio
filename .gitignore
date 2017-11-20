@@ -10,3 +10,4 @@ Module3/Notebooks/.ipynb_checkpoints/
 
 Module3/PartB/gurobi.log
 Module3/PartB/models/recon_2.2.xml
+*.pyc
