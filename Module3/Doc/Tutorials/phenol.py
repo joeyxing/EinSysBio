@@ -48,7 +48,7 @@ NX.draw_networkx_edges(G,pos)
 labels = {}
 for node in G.nodes():
     labels[node] = node
-    NX.draw_networkx_labels(G,pos,labels,font_color='black',
+NX.draw_networkx_labels(G,pos,labels,font_color='black',
                             font_family='sans-serif')
     
 P.show()
