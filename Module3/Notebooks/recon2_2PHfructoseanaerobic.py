@@ -178,9 +178,7 @@ def max_fluxes(sbml):
     nodef.write("\n")
     nodef.write("\n".join([";".join(r) for r in listOfEdges]))
     nodef.close()
-
-    return (listOfNodes, listOfEdges)
-
+             
 
 def max_flux(sbml, carbon_sourcel, objective, normoxic, media):
     '''
