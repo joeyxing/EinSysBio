@@ -22,7 +22,7 @@ NAN = float('nan')
 
 
 def run_model():
-    '''Runs some tests on the recon_2.2 model that is 
+    '''Runs some tests on the recon_2.2 model that is
        stored in the folder d.models'''
     tests_path = os.path.dirname(__file__)
     model_path = os.path.join(tests_path, 'models')
@@ -168,10 +168,10 @@ def max_fluxes(sbml):
                       if not n in listOfNodes: listOfNodes.append(n)
                   for n in innodes:
                       if not (n, reactionnode, abs(v[j])) in listOfEdges:
-                         listOfEdges.append((n, reactionnode, str(abs(v[j])))) 
+                         listOfEdges.append((n, reactionnode, str(abs(v[j]))))
                   for n in outnodes:
                       if not (reactionnode, n) in listOfEdges:
-                         listOfEdges.append((reactionnode, n, str(abs(v[j])))) 
+                         listOfEdges.append((reactionnode, n, str(abs(v[j]))))
                   print '%s\t%s\t%g\t[%s,\t%s]' % ('reaction', reactionnode, abs(v[j]), txt, txt_formula)
     nodef=open('fructoseanaerobicfluxgraph.txt', 'w')
     nodef.write("\n".join(listOfNodes))
@@ -373,7 +373,7 @@ def convert_sbml_to_cobra(sbml, bound=INF):
             if not model.getSpecies(sID).getBoundaryCondition():
                 i = sIDs.index(sID)
                 S[i, j] = S[i, j] + s
-            
+
         kinetic_law = reaction.getKineticLaw()
         rxn_lb = kinetic_law.getParameter('LOWER_BOUND').getValue()
         rxn_ub = kinetic_law.getParameter('UPPER_BOUND').getValue()
@@ -754,10 +754,10 @@ def mydisplay_reaction_and_formula_Nodes(rID, sbml, forward=True):
 
     itxt = '--> '
     itxt_formula = '--> '
-   
+
     rtxt, rtxt_formula, rnodes=genTxtAndTxtFormulaAndNodes(sbml, reaction.getListOfReactants())
     ptxt, ptxt_formula, pnodes=genTxtAndTxtFormulaAndNodes(sbml, reaction.getListOfProducts())
-    if forward: 
+    if forward:
        txt=rtxt+itxt+ptxt
        txt_formula=rtxt_formula+itxt_formula+ptxt_formula
        innodes=rnodes
