@@ -1,30 +1,21 @@
 #!/home/joey/Apps/SysBio2/bin/python
 ''' Author: Weizhou Xing
     System biology module 3
-    Part B
+    Part B: draw M/R graph from description txt file
+    Usage: python draw_MR filename.txt
 '''
 
-import itertools
-import numpy as np
-import os
-import re
 
-import gurobipy
-
-import libsbml
-import scipy.sparse as sparse
-
-import recon2_2PHfructoseanaerobic as phlib
 import networkx as NX
-import pylab as P
-
+import matplotlib.pyplot as plt
+import sys
 
 def draw_MR_Graph(nl, el):
     '''draw metabolite/reaction graph
     nl: node list
     el: edge list
     '''
-    G = NX.DiGraph()
+    G = NX.Graph()
 
     rNodes = []
     mNodes = []
@@ -40,10 +31,18 @@ def draw_MR_Graph(nl, el):
     nodes['M'] = mNodes
 
     nodeColor = {'R':'#0DFF0D', 'M':'#FF0D0D'}
-    for e in el:
-        G.add_edge(e[0], e[1], weight=float(e[2]))
 
-    fig = P.figure()
+    for e in el:
+        if e[0][0] == 'M' and e[1][0] == 'R':
+            direction = 'reactant' # M -> R
+        else:
+            direction = 'product' # R -> M
+
+        G.add_edge(e[0], e[1],
+                   weight=float(e[2]),
+                   direction=direction)
+
+    fig = plt.figure()
     pos = NX.spring_layout(G, iterations=5000)
     for nodetype in ['R', 'M']:
         for node in nodes[nodetype]:
@@ -66,7 +65,8 @@ def draw_MR_Graph(nl, el):
                             font_family='sans-serif',
                             font_size=9)
     fig.suptitle('Fructose Anaerobic')
-    P.show(fig)
+    plt.show(fig)
+    return G
 
 
 def read_MR_txt(path='fructoseanaerobicfluxgraph.txt'):
@@ -75,7 +75,7 @@ def read_MR_txt(path='fructoseanaerobicfluxgraph.txt'):
     lines = txt.split('\n')
     nl = []
     el = []
-    
+
     for line in lines:
         ll = line.split(';')
         if len(ll)==1:
@@ -86,7 +86,9 @@ def read_MR_txt(path='fructoseanaerobicfluxgraph.txt'):
     return nl, el
 
 
-def main():
+def main(path='fructoseanaerobicfluxgraph.txt'):
+    # # unconmment below to construct graph by computing again
+    # import recon2_2PHfructoseanaerobic as phlib
     # tests_path = os.path.dirname(__file__)
     # model_path = os.path.join(tests_path, 'models')
     # model_path = os.path.normpath(model_path)
@@ -98,9 +100,9 @@ def main():
     # # nodes list, edges list
     # nl, el = phlib.max_fluxes(sbml)
 
-    nl, el = read_MR_txt()
-    draw_MR_Graph(nl, el)
+    nl, el = read_MR_txt(path)
+    G = draw_MR_Graph(nl, el)
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1])
