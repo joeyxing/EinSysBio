@@ -1,0 +1,264 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\date{}
+
+\begin{document}
+
+\hypertarget{header-n3}{%
+\section{System biology module 3 part A}\label{header-n3}}
+
+\hypertarget{header-n5}{%
+\subsection{General purpose functions}\label{header-n5}}
+
+\hypertarget{header-n6}{%
+\subsubsection{Trace back}\label{header-n6}}
+
+Personally speaking, I really like this function \texttt{trace\_back}
+because it uses recursion to solve the problem. Argument explanation is
+available in the docstring.
+
+The base condition of the recursion varies as the alignment method
+changes.For global alignment, the base recursion is when \texttt{i} and
+\texttt{j} are both \texttt{0},because according to definition, the
+start of global alignment is on the top-left corner. For semi-global
+alignment, the base recursion is when one of \texttt{i} and \texttt{j}
+is \texttt{0} because the starting point of semi-global alignment is on
+the first column or first row. For local alignment, it can be more
+complicated because it can stop anywhere in the score matrix. According
+to the algorithm of local alignment, when a subsequence starts, the
+score at the start point should be \texttt{0} and none of the three
+directions can yield a score of \texttt{0} ( see the last \texttt{if}
+statement of function \texttt{trace\_back} ).
+
+\texttt{trace\_back} returns a list \texttt{trace\_list} whose elements
+are also lists in the following form:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{[[s0, s1, s2, s3], [t1, t2, t3], (a, b)]}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{trace\_list{[}0{]}} records all the position in sequecne
+\texttt{s} where gap should be inserted. \texttt{trace\_list{[}1{]}}
+records all the position in sequence \texttt{t} where gap should be
+inserted. \texttt{(a,\ b)} is the start point of the sequence alignment
+or end point of the recursion.
+
+\hypertarget{header-n31}{%
+\subsubsection{Print sequence}\label{header-n31}}
+
+\texttt{print\_sequence} prints the result of the sequence in a more
+beautiful and intuitive way. A match is represented by
+\texttt{\textbar{}}. \texttt{-} means a gap and \texttt{x} means a
+mismatch.
+
+For example: local alignment
+
+\begin{verbatim}
+CTACGGGATCGTGATCGTAGCTAGGATGCTAGCAAGCTAGCACATCAGCAAACATCGACG
+              |||||xxx||xxx||x|xxx|||||||xx|||xx||-x|||||||
+           GCTTCGTACGCAGCTAGCCATTCAGCTAGCGGATCGACA-GCATCGACTAGGCAT
+\end{verbatim}
+
+\hypertarget{header-n39}{%
+\subsubsection{align\_trace\_print}\label{header-n39}}
+
+This function is nothing but a wrapper of the three alignment function,
+\texttt{trace\_back} and \texttt{print\_sequence} to make the programme
+more simple. It takes three arguments,
+
+\texttt{s}: sequence1 \texttt{t}: sequence2 \texttt{alignment}: string
+"global", "semi" or "local"
+
+\hypertarget{header-n48}{%
+\subsection{(a) Global alignment}\label{header-n48}}
+
+Initialize a matrix, fill in the first row and first column then use
+dynamic programming algorithm to fill in the rest entries.
+
+Time complexity: \(O(len(s) \cdot len(t))\)
+
+\hypertarget{header-n54}{%
+\subsection{(b) Semi-global alignment}\label{header-n54}}
+
+Similar to global alignment but fill the first row and first column with
+zeros.
+
+Time complexity: \(O(len(s) \cdot len(t))\)
+
+\hypertarget{header-n59}{%
+\subsection{(c) Local alignment}\label{header-n59}}
+
+Time complexity: \$O(len(s) \textbackslash{}cdot len(t))
+
+\hypertarget{header-n62}{%
+\subsection{(d) special semi-global alignment}\label{header-n62}}
+
+I use a matrix \texttt{A\_gap} of size
+\texttt{{[}len(s),\ len(t),\ 2{]}} to record the number of gaps for both
+sequences on a point.
+
+\texttt{A\_gap{[}i,\ j,\ 0{]}} is the number of gaps for \texttt{s} to
+reach point \texttt{A{[}i,\ j{]}}. Similarly,
+\texttt{A\_gap{[}i,\ j,\ 1{]}} is number of gaps for \texttt{t}
+
+No element in \texttt{A\_gap} is greater than 10:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{print}\NormalTok{ np.where(A_gap[:,:,}\DecValTok{0}\NormalTok{] }\OperatorTok{>} \DecValTok{10}\NormalTok{)}
+\BuiltInTok{print}\NormalTok{ np.where(A_gap[:,:,}\DecValTok{1}\NormalTok{] }\OperatorTok{>} \DecValTok{10}\NormalTok{)}
+
+\NormalTok{(array([], dtype}\OperatorTok{=}\NormalTok{int64), array([], dtype}\OperatorTok{=}\NormalTok{int64))}
+\NormalTok{(array([], dtype}\OperatorTok{=}\NormalTok{int64), array([], dtype}\OperatorTok{=}\NormalTok{int64))}
+\end{Highlighting}
+\end{Shaded}
+
+Since this is semi-global alignment and the gaps at the begining of the
+matrix don't have any cost, one cannot judge if the number of gaps at a
+point is over 10 without calculating it. Hence, the time complexity of
+the programme cannot be reduced to lower than
+\(O(3 \cdot len(s) \cdot len(t)) =O(len(s) \cdot len(t))\)
+
+\hypertarget{header-n78}{%
+\subsection{Result of the whole script}\label{header-n78}}
+
+\begin{verbatim}
+System Biology Module 3 Part A
+
+(a): Global Alignment
+Score: 2
+[[[], [2, 5], (0, 0)], [[], [3, 5], (0, 0)]]
+
+Alignment0:
+ACAAGGA
+||-|||-
+AC-AGG-
+
+Alignment1:
+ACAAGGA
+|||-||-
+ACA-GG-
+
+(b): Semi-global Alignment
+Score: 12
+[[[], [], (2, 0)]]
+
+Alignment0:
+AGCCAATTACCAATTAAGG
+  ||||||
+  CCAATT
+[[[], [], (9, 0)]]
+
+Alignment1:
+AGCCAATTACCAATTAAGG
+         ||||||
+         CCAATT
+
+(c): Local Alignment
+Score: 9
+
+Alignment0:
+AGCCTTCCTAGGG
+   ||||x|
+  GCTTCGTTT
+(d):
+18956
+18957
+(array([], dtype=int64), array([], dtype=int64))
+(array([], dtype=int64), array([], dtype=int64))
+37248
+\end{verbatim}
+
+\end{document}
