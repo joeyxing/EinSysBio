@@ -88,6 +88,7 @@ def read_MR_txt(path='fructoseanaerobicfluxgraph.txt'):
 
 def main(path='fructoseanaerobicfluxgraph.txt'):
     # # unconmment below to construct graph by computing again
+
     # import recon2_2PHfructoseanaerobic as phlib
     # tests_path = os.path.dirname(__file__)
     # model_path = os.path.join(tests_path, 'models')
@@ -105,4 +106,8 @@ def main(path='fructoseanaerobicfluxgraph.txt'):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    if len(sys.argv) == 1:
+        path = 'fructoseanaerobicfluxgraph.txt'
+    else:
+        path = sys.argv[1]
+    main(path)
