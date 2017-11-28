@@ -1,3 +1,32 @@
+'''
+System Biology Module 3 Part B: Exercise B.4
+Author: Weizhou Xing
+
+To block the product M_mthgxl_e, one has to block all the reactions that produces
+it. There is only one reaction in the graph that produce M_mthgxl_e, which is 
+R_EX_mthgxl(e). ID = R_EX_mthgxl_LPAREN_e_RPAREN_
+
+I did the **following** work in this script:
+
+1. add two functions `read_block_list` and `block_reactions`.
+
+    - read_block_list: read the reactions to block from a text file and return the
+      reactions as a list
+
+    - block_reactions: set the kineticLaw parameters `UPPER_BOUND` and `LOWER_BOUND`
+      of all the reactions in block list to zeros so that the reaction is blocked
+      from both sides
+
+2. modify your function `max_flux` to `my_max_flux` so that it calls my functions
+described above when calculating the maximum flux. Also modify `max_fluxes` to
+`my_max_fluxes` in which `max_flux` is called.
+
+The resulted R/M graph can be ploted using script `draw_MR.py`:
+`Bash: $ python draw_MR.py fructoseanaerobicfluxgraph2.txt`
+
+Result of script is stored in file `fructoseanaerobicfluxgraph2.txt`. You can
+varify that there are no product `M_mthgxl_e` any more.
+'''
 import itertools
 import numpy
 import os
