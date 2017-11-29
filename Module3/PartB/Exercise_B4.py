@@ -27,6 +27,8 @@ The resulted R/M graph can be ploted using script `draw_MR.py`:
 Result of script is stored in file `fructoseanaerobicfluxgraph2.txt`. You can
 varify that there are no product `M_mthgxl_e` any more.
 '''
+
+
 import itertools
 import numpy
 import os
