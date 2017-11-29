@@ -19,6 +19,7 @@ and repeat all the exercises for this mixed input in anaerobic and aerobic
 conditions.
 1. set the carbon sources as `['EX_glu(e)', 'EX_fru(e)']`
 2. loop normoxic over `[False, True']`
+3. value = [25,25]
 
 # Solution
 
@@ -26,10 +27,20 @@ To realize this, I modified you original program in the following way so
 that more arguments can be passed to the function `max_flux` and
 `max_fluxes`.
 
-1.
+1. max_fluxes
 
+def max_fluxes(sbml, carbon_sourcesl, valuesl, normoxicl):
+    ...
+    ...
 
+2. max_flux
 
+def max_flux(sbml, carbon_sourcel, valuel, objective, normoxic, media):
+    ...
+    ...
+
+This script only generates the text files for plotting. Please read Exercise_B5B6.ipynb
+for the plot and degree analysis.
 '''
 
 
