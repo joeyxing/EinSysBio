@@ -11,8 +11,11 @@ import networkx as NX
 import matplotlib.pyplot as plt
 import sys
 
+
 __all__ = ['draw_MR_Graph',
            'read_MR_txt']
+
+
 def draw_MR_Graph(nl, el, title='Fructose Anaerobic'):
     '''draw metabolite/reaction graph
     nl: node list
@@ -45,7 +48,7 @@ def draw_MR_Graph(nl, el, title='Fructose Anaerobic'):
                    weight=float(e[2]),
                    direction=direction)
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(12,8))
     pos = NX.spring_layout(G, iterations=5000)
     for nodetype in ['R', 'M']:
         for node in nodes[nodetype]:
