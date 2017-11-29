@@ -7,6 +7,7 @@
 
 
 import networkx as NX
+# import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
@@ -54,7 +55,7 @@ def draw_MR_Graph(nl, el):
             NX.draw_networkx_nodes(G, pos,
                                    nodelist=[node],
                                    node_color=nodeColor[nodetype],
-                                   node_size=total_weight)
+                                   node_size=total_weight/10)
 
     NX.draw_networkx_edges(G, pos)
     labels = {}
