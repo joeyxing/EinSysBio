@@ -11,7 +11,9 @@ import networkx as NX
 import matplotlib.pyplot as plt
 import sys
 
-def draw_MR_Graph(nl, el):
+__all__ = ['draw_MR_Graph',
+           'read_MR_txt']
+def draw_MR_Graph(nl, el, title='Fructose Anaerobic'):
     '''draw metabolite/reaction graph
     nl: node list
     el: edge list
@@ -65,8 +67,9 @@ def draw_MR_Graph(nl, el):
                             font_color='black',
                             font_family='sans-serif',
                             font_size=9)
-    fig.suptitle('Fructose Anaerobic')
-    plt.show(fig)
+    fig.suptitle(title)
+    plt.axis('off')
+    plt.show()
     return G
 
 
