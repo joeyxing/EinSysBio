@@ -3,7 +3,7 @@ System Biology Module 3 Part B: Exercise B.4
 Author: Weizhou Xing
 
 To block the product M_mthgxl_e, one has to block all the reactions that produces
-it. There is only one reaction in the graph that produce M_mthgxl_e, which is 
+it. There is only one reaction in the graph that produce M_mthgxl_e, which is
 R_EX_mthgxl(e). ID = R_EX_mthgxl_LPAREN_e_RPAREN_
 
 I did the **following** work in this script:
@@ -105,7 +105,7 @@ def my_max_fluxes(sbml):
                       if not (reactionnode, n) in listOfEdges:
                          listOfEdges.append((reactionnode, n, str(abs(v[j]))))
                   print '%s\t%s\t%g\t[%s,\t%s]' % ('reaction', reactionnode, abs(v[j]), txt, txt_formula)
-    nodef=open('fructoseanaerobicfluxgraph2.txt', 'w')
+    nodef=open('exclude_toxic.txt', 'w')
     nodef.write("\n".join(listOfNodes))
     nodef.write("\n")
     nodef.write("\n".join([";".join(r) for r in listOfEdges]))
