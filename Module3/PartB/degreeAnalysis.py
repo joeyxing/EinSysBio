@@ -32,7 +32,7 @@ def my_dijkstra(source, G, weight=1):
         #  min_dist = float('inf')
         for n in G.neighbors(Green[-1]):
             if n in Red:
-                if isinstance(weight, int):
+                if isinstance(weight, (int, float)):
                     cost = weight
                 elif isinstance(weight, str):
                     edge_data = G.get_edge_data(Green[-1], n)
@@ -107,7 +107,7 @@ def draw_bar(distr):
 def compartment_analysis(G):
     freq_table = {}
     for node in G.nodes():
-        # a metablite
+        # a metabolite
         if node[0] == 'M':
             compartment = node[-1]
 
