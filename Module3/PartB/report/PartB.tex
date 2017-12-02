@@ -1,0 +1,222 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\date{}
+
+\begin{document}
+
+\hypertarget{header-n3}{%
+\section{System biology module 3 part B}\label{header-n3}}
+
+\hypertarget{header-n5}{%
+\subsection{General Purpose Modules}\label{header-n5}}
+
+usage:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ draw_MR }\ImportTok{import} \OperatorTok{*}
+\ImportTok{from}\NormalTok{ degreeAnalysis }\ImportTok{import} \OperatorTok{*}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{header-n9}{%
+\subsubsection{draw\_MR.py}\label{header-n9}}
+
+\texttt{read\_MR\_txt}: read from a txt file, for example,
+fructoseanaerobicfluxgraph.txt and return the list of edges \texttt{el}
+and nodes \texttt{nl} in the graph.
+
+\texttt{draw\_MR\_Graph}: use the list returned by
+\texttt{read\_MR\_txt} to generate a \texttt{networkx} graph.
+
+\hypertarget{header-n16}{%
+\subsubsection{degreeAnalysis.py}\label{header-n16}}
+
+\texttt{my\_dijkstra}: calculate the shortest distance from a source
+node to the rest of the nodes using Dijkstra algorithm. \texttt{weight}
+is a optional argument and it can be \texttt{string}, \texttt{int} or
+\texttt{float}.
+
+\begin{itemize}
+\item
+  \texttt{string}: use the value in the field of the string as the
+  weight.
+\item
+  \texttt{int} or \texttt{float}: use this value as the fixed weight for
+  all edges.
+\end{itemize}
+
+\texttt{degree\_stats}: plot a histogram of the number of the nodes with
+different numbers of degree. Print the average degree, variance of
+degree and the hubs node (with greatest degree).
+
+\texttt{draw\_bar}: draw a bar chart using the given data. It is called
+in \texttt{degree\_stats} and \texttt{compartment\_analysis}.
+
+\texttt{compartment\_analysis}: plot a histogram of the number of
+reactions and metabolites with regard to the compartment they belong to.
+
+\hypertarget{header-n38}{%
+\subsection{B.2, B.3}\label{header-n38}}
+
+Please refer to notebook \texttt{Exercise\_B2B3.py} or report
+\texttt{Exercise\_B2B3.html}.
+
+\hypertarget{header-n41}{%
+\subsection{B.4}\label{header-n41}}
+
+To block the product \texttt{M\_mthgxl\_e}, one has to block all the
+reactions that produces it. There is only one reaction in the graph that
+produce \texttt{M\_mthgxl\_e}, which is
+\texttt{R\_EX\_mthgxl(e),\ ID\ =\ R\_EX\_mthgxl\_LPAREN\_e\_RPAREN\_}.
+
+I did the \textbf{following} work in this script:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  add two functions \texttt{read\_block\_list} and
+  \texttt{block\_reactions}.
+
+  \begin{itemize}
+  \item
+    read\_block\_list: read the reactions to block from a text file and
+    return the reactions as a list
+  \item
+    block\_reactions: set the kineticLaw parameters
+    \texttt{UPPER\_BOUND} and \texttt{LOWER\_BOUND} of all the reactions
+    in block list to zeros so that the reaction is blocked from both
+    sides
+  \end{itemize}
+\item
+  modify your function \texttt{max\_flux} to \texttt{my\_max\_flux} so
+  that it calls my functions described above when calculating the
+  maximum flux. Also modify \texttt{max\_fluxes} to
+  \texttt{my\_max\_fluxes} in which \texttt{max\_flux} is called.
+\end{enumerate}
+
+The resulted R/M graph can be plotted using script \texttt{draw\_MR.py}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{$ }\ExtensionTok{python}\NormalTok{ draw_MR.py exclude_toxic.txt}
+\end{Highlighting}
+\end{Shaded}
+
+Result of script is stored in file \texttt{exclude\_toxic.txt}. It can
+be verified that there are no product \texttt{M\_mthgxl\_e} any more.
+
+\hypertarget{header-n73}{%
+\subsection{B.5, B.6}\label{header-n73}}
+
+First, in script Exercise\_B5B6.py, I generate the text file of
+different graphs.
+
+\begin{itemize}
+\item
+  Fructose aerobic
+\item
+  Glucose anaerobic
+\item
+  Glucose aerobic
+\item
+  Fructose + glucose anaerobic
+\item
+  Fructose + glucose aerobic
+\end{itemize}
+
+Then, in notebook Exercise\_B5B6.ipynb, I repeated all the analysis for
+these new graphs. Please read the notebook or report Exercise\_B5B6.html
+for more details.
+
+\end{document}
