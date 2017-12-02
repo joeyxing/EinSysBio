@@ -175,7 +175,7 @@ def draw_bar(distr):
 def compartment_analysis(G):
     freq_table = {}
     for node in G.nodes():
-        # a metablite
+        # a metabolite
         if node[0] == 'M':
             compartment = node[-1]
 
