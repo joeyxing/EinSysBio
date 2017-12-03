@@ -16,7 +16,8 @@ from degreeAnalysis import *
 ### draw_MR.py
 
 `read_MR_txt`: read from a txt file, for example, fructoseanaerobicfluxgraph.txt
-and return the list of edges `el` and nodes `nl` in the graph.
+and return the list of edges `el` and nodes `nl` in the graph. The size of the
+nodes is proportional to the sum of the weight of the edges connect to it.
 
 `draw_MR_Graph`: use the list returned by `read_MR_txt` to generate a `networkx`
 graph.
@@ -63,8 +64,8 @@ I did the **following** work in this script:
       from both sides
 
 2. modify your function `max_flux` to `my_max_flux` so that it calls my functions
-described above when calculating the maximum flux. Also modify `max_fluxes` to
-`my_max_fluxes` in which `max_flux` is called.
+  described above when calculating the maximum flux. Also modify `max_fluxes` to
+  `my_max_fluxes` in which `max_flux` is called.
 
 The resulted R/M graph can be plotted using script `draw_MR.py`:
 
@@ -84,6 +85,45 @@ First, in script Exercise_B5B6.py, I generate the text file of different graphs.
 - Glucose aerobic: EX_glc(e)True.txt
 - Fructose + glucose anaerobic: EX_glc(e)EX_fru(e)False.txt
 - Fructose + glucose aerobic: EX_glc(e)EX_fru(e)True.txt
+
+### B.5
+
+Repeat exercises for fructose in aerobic conditions:
+- let the `normoxic` variable of `max_fluxes` loop over list `[True]`
+
+Repeat exercises for glucose first in anaerobic condition then in aerobic
+condition:
+1. set the carbon source to be `EX_glc(e)`
+2. let the `normoxic` variable of `max_fluxes` loop over [False, True]
+
+### B.6
+
+Consider a mixed input by inputing 25 flux units for fructose and 25 for glucose
+and repeat all the exercises for this mixed input in anaerobic and aerobic
+conditions.
+1. set the carbon sources as `['EX_glu(e)', 'EX_fru(e)']`
+2. loop normoxic over `[False, True']`
+3. value = [25,25]
+
+### Solution
+
+To realize this, I modified you original program in the following way so
+that more arguments can be passed to the function `max_flux` and
+`max_fluxes`.
+
+1. max_fluxes
+```python
+def max_fluxes(sbml, carbon_sourcesl, valuesl, normoxicl):
+    ...
+    ...
+```
+
+2. max_flux
+```python
+def max_flux(sbml, carbon_sourcel, valuel, objective, normoxic, media):
+    ...
+    ...
+```
 
 ### Flux result:
 

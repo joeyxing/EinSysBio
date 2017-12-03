@@ -94,14 +94,14 @@
 
 \begin{document}
 
-\hypertarget{header-n0}{%
-\section{System biology module 3 part B}\label{header-n0}}
+\hypertarget{header-n114}{%
+\section{System biology module 3 part B}\label{header-n114}}
 
-\hypertarget{header-n2}{%
-\subsection{File description}\label{header-n2}}
+\hypertarget{header-n116}{%
+\subsection{File description}\label{header-n116}}
 
-\hypertarget{header-n5}{%
-\subsection{General Purpose Modules}\label{header-n5}}
+\hypertarget{header-n119}{%
+\subsection{General Purpose Modules}\label{header-n119}}
 
 usage:
 
@@ -112,18 +112,19 @@ usage:
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{header-n9}{%
-\subsubsection{draw\_MR.py}\label{header-n9}}
+\hypertarget{header-n123}{%
+\subsubsection{draw\_MR.py}\label{header-n123}}
 
 \texttt{read\_MR\_txt}: read from a txt file, for example,
 fructoseanaerobicfluxgraph.txt and return the list of edges \texttt{el}
-and nodes \texttt{nl} in the graph.
+and nodes \texttt{nl} in the graph. The size of the nodes is
+proportional to the sum of the weight of the edges connect to it.
 
 \texttt{draw\_MR\_Graph}: use the list returned by
 \texttt{read\_MR\_txt} to generate a \texttt{networkx} graph.
 
-\hypertarget{header-n16}{%
-\subsubsection{degreeAnalysis.py}\label{header-n16}}
+\hypertarget{header-n131}{%
+\subsubsection{degreeAnalysis.py}\label{header-n131}}
 
 \texttt{my\_dijkstra}: calculate the shortest distance from a source
 node to the rest of the nodes using Dijkstra algorithm. \texttt{weight}
@@ -149,14 +150,14 @@ in \texttt{degree\_stats} and \texttt{compartment\_analysis}.
 \texttt{compartment\_analysis}: plot a histogram of the number of
 reactions and metabolites with regard to the compartment they belong to.
 
-\hypertarget{header-n38}{%
-\subsection{B.2, B.3}\label{header-n38}}
+\hypertarget{header-n153}{%
+\subsection{B.2, B.3}\label{header-n153}}
 
 Please refer to notebook \texttt{Exercise\_B2B3.py} or report
 \texttt{Exercise\_B2B3.html}.
 
-\hypertarget{header-n41}{%
-\subsection{B.4}\label{header-n41}}
+\hypertarget{header-n156}{%
+\subsection{B.4}\label{header-n156}}
 
 To block the product \texttt{M\_mthgxl\_e}, one has to block all the
 reactions that produces it. There is only one reaction in the graph that
@@ -199,8 +200,8 @@ The resulted R/M graph can be plotted using script \texttt{draw\_MR.py}:
 Result of script is stored in file \texttt{exclude\_toxic.txt}. It can
 be verified that there are no product \texttt{M\_mthgxl\_b} any more.
 
-\hypertarget{header-n73}{%
-\subsection{B.5, B.6}\label{header-n73}}
+\hypertarget{header-n188}{%
+\subsection{B.5, B.6}\label{header-n188}}
 
 First, in script Exercise\_B5B6.py, I generate the text file of
 different graphs.
@@ -218,8 +219,84 @@ different graphs.
   Fructose + glucose aerobic: EX\_glc(e)EX\_fru(e)True.txt
 \end{itemize}
 
-\hypertarget{header-n92}{%
-\subsubsection{Flux result:}\label{header-n92}}
+\hypertarget{header-n207}{%
+\subsubsection{B.5}\label{header-n207}}
+
+Repeat exercises for fructose in aerobic conditions:
+
+\begin{itemize}
+\item
+  let the \texttt{normoxic} variable of \texttt{max\_fluxes} loop over
+  list \texttt{{[}True{]}}
+\end{itemize}
+
+Repeat exercises for glucose first in anaerobic condition then in
+aerobic condition:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  set the carbon source to be \texttt{EX\_glc(e)}
+\item
+  let the \texttt{normoxic} variable of \texttt{max\_fluxes} loop over
+  {[}False, True{]}
+\end{enumerate}
+
+\hypertarget{header-n224}{%
+\subsubsection{B.6}\label{header-n224}}
+
+Consider a mixed input by inputing 25 flux units for fructose and 25 for
+glucose and repeat all the exercises for this mixed input in anaerobic
+and aerobic conditions.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  set the carbon sources as
+  \texttt{{[}\textquotesingle{}EX\_glu(e)\textquotesingle{},\ \textquotesingle{}EX\_fru(e)\textquotesingle{}{]}}
+\item
+  loop normoxic over \texttt{{[}False,\ True\textquotesingle{}{]}}
+\item
+  value = {[}25,25{]}
+\end{enumerate}
+
+\hypertarget{header-n239}{%
+\subsubsection{Solution}\label{header-n239}}
+
+To realize this, I modified you original program in the following way so
+that more arguments can be passed to the function \texttt{max\_flux} and
+\texttt{max\_fluxes}.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  max\_fluxes
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ max_fluxes(sbml, carbon_sourcesl, valuesl, normoxicl):}
+\NormalTok{    ...}
+\NormalTok{    ...}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  max\_flux
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ max_flux(sbml, carbon_sourcel, valuel, objective, normoxic, media):}
+\NormalTok{    ...}
+\NormalTok{    ...}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{header-n254}{%
+\subsubsection{Flux result:}\label{header-n254}}
 
 \begin{itemize}
 \item
@@ -234,8 +311,8 @@ different graphs.
   Fructose + glucose aerobic: 1600
 \end{itemize}
 
-\hypertarget{header-n109}{%
-\subsubsection{Plotting}\label{header-n109}}
+\hypertarget{header-n271}{%
+\subsubsection{Plotting}\label{header-n271}}
 
 Then, in notebook Exercise\_B5B6.ipynb, I repeated all the analysis for
 these new graphs. Please read the notebook or report Exercise\_B5B6.html
