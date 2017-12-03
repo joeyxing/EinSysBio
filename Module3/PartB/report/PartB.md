@@ -1,5 +1,9 @@
 # System biology module 3 part B
 
+## File description
+
+
+
 ## General Purpose Modules
 
 usage:
@@ -69,17 +73,26 @@ $ python draw_MR.py exclude_toxic.txt
 ```
 
 Result of script is stored in file `exclude_toxic.txt`. It can be verified that
-there are no product `M_mthgxl_e` any more.
+there are no product `M_mthgxl_b` any more.
 
 ## B.5, B.6
 
 First, in script Exercise_B5B6.py, I generate the text file of different graphs.
 
-- Fructose aerobic
-- Glucose anaerobic
-- Glucose aerobic
-- Fructose + glucose anaerobic
-- Fructose + glucose aerobic
+- Fructose aerobic: EX_fru(e)True.txt
+- Glucose anaerobic: EX_glc(e)False.txt
+- Glucose aerobic: EX_glc(e)True.txt
+- Fructose + glucose anaerobic: EX_glc(e)EX_fru(e)False.txt
+- Fructose + glucose aerobic: EX_glc(e)EX_fru(e)True.txt
 
+### Flux result:
+
+- Fructose aerobic: 1600
+- Glucose anaerobic: 100
+- Glucose aerobic: 1600
+- Fructose + glucose anaerobic: 100
+- Fructose + glucose aerobic: 1600
+
+### Plotting
 Then, in notebook Exercise_B5B6.ipynb, I repeated all the analysis for these new
 graphs. Please read the notebook or report Exercise_B5B6.html for more details.
