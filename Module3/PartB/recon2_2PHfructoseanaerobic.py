@@ -173,7 +173,7 @@ def max_fluxes(sbml):
                       if not (reactionnode, n) in listOfEdges:
                          listOfEdges.append((reactionnode, n, str(abs(v[j]))))
                   print '%s\t%s\t%g\t[%s,\t%s]' % ('reaction', reactionnode, abs(v[j]), txt, txt_formula)
-    nodef=open('EX_fru(e)False.txt', 'w')
+    nodef=open('graphtxt/EX_fru(e)False.txt', 'w')
     nodef.write("\n".join(listOfNodes))
     nodef.write("\n")
     nodef.write("\n".join([";".join(r) for r in listOfEdges]))

@@ -225,6 +225,7 @@ def max_fluxes(sbml, carbon_sourcesl, valuesl, normoxicl):
             if isinstance(carbon_sources, str):
                 carbon_sources = [carbon_sources]
             graph_file_name = ''.join(carbon_sources) + str(normoxic) + '.txt'
+            graph_file_name = 'graphtxt/' + graph_file_name
             nodef=open(graph_file_name, 'w')
             nodef.write("\n".join(listOfNodes))
             nodef.write("\n")
