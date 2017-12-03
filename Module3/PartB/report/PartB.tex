@@ -94,8 +94,11 @@
 
 \begin{document}
 
-\hypertarget{header-n3}{%
-\section{System biology module 3 part B}\label{header-n3}}
+\hypertarget{header-n0}{%
+\section{System biology module 3 part B}\label{header-n0}}
+
+\hypertarget{header-n2}{%
+\subsection{File description}\label{header-n2}}
 
 \hypertarget{header-n5}{%
 \subsection{General Purpose Modules}\label{header-n5}}
@@ -194,7 +197,7 @@ The resulted R/M graph can be plotted using script \texttt{draw\_MR.py}:
 \end{Shaded}
 
 Result of script is stored in file \texttt{exclude\_toxic.txt}. It can
-be verified that there are no product \texttt{M\_mthgxl\_e} any more.
+be verified that there are no product \texttt{M\_mthgxl\_b} any more.
 
 \hypertarget{header-n73}{%
 \subsection{B.5, B.6}\label{header-n73}}
@@ -204,16 +207,35 @@ different graphs.
 
 \begin{itemize}
 \item
-  Fructose aerobic
+  Fructose aerobic: EX\_fru(e)True.txt
 \item
-  Glucose anaerobic
+  Glucose anaerobic: EX\_glc(e)False.txt
 \item
-  Glucose aerobic
+  Glucose aerobic: EX\_glc(e)True.txt
 \item
-  Fructose + glucose anaerobic
+  Fructose + glucose anaerobic: EX\_glc(e)EX\_fru(e)False.txt
 \item
-  Fructose + glucose aerobic
+  Fructose + glucose aerobic: EX\_glc(e)EX\_fru(e)True.txt
 \end{itemize}
+
+\hypertarget{header-n92}{%
+\subsubsection{Flux result:}\label{header-n92}}
+
+\begin{itemize}
+\item
+  Fructose aerobic: 1600
+\item
+  Glucose anaerobic: 100
+\item
+  Glucose aerobic: 1600
+\item
+  Fructose + glucose anaerobic: 100
+\item
+  Fructose + glucose aerobic: 1600
+\end{itemize}
+
+\hypertarget{header-n109}{%
+\subsubsection{Plotting}\label{header-n109}}
 
 Then, in notebook Exercise\_B5B6.ipynb, I repeated all the analysis for
 these new graphs. Please read the notebook or report Exercise\_B5B6.html
