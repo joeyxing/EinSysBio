@@ -197,10 +197,10 @@ def max_fluxes(sbml, carbon_sourcesl, valuesl, normoxicl):
 
 
     model = sbml.getModel()
-    listOfNodes=[]
-    listOfEdges=[]
     for normoxic in normoxicl:
         for i,carbon_sources in enumerate(carbon_sourcesl):
+            listOfNodes=[]
+            listOfEdges=[]
             v, f_opt = max_flux(sbml, carbon_sources, valuesl[i], objective, normoxic, [])
             print '\n%s (%s):\t%g' % (carbon_sources,
                                     'normoxic' if normoxic else 'anaerobic',
