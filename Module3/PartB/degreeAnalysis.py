@@ -97,7 +97,13 @@ def draw_bar(distr):
     ind = np.arange(N)
     rects = ax.bar(ind, y, 0.5, color="b")
     ax.set_xticks(ind)
-    # ax.set_xticklabels(freq_table.keys())
+
+    for rect in rects:
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,
+                '%d' % int(height),
+                ha='center', va='bottom')
+
     ax.set_ylabel("number of occurences")
     ax.set_xlabel("degree")
     ax.set_title("Degree Distribution")
